@@ -1,15 +1,9 @@
-import home from '../images/icons8-home-24.png'
-import search from '../images/icons8-search-24.png'
+import add from '../images/icons8-create-64.png'
+import search from '../images/icons8-search-48.png'
+import profile from '../images/icons8-user-location-48.png'
 
 
 const Sidebarlinks=[
-
-{
-    imageUrl:home,
-    route:'/',
-    label:'Home'
-
-},
 
 {
 
@@ -19,6 +13,22 @@ const Sidebarlinks=[
 
 
 },
+
+{
+imageUrl:profile,
+route:'/dashboard',
+label:'profile'
+
+}
+
+,
+
+{
+imageUrl:add,
+route:'/add',
+label:'create'
+
+}
 
 
 

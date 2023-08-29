@@ -1,40 +1,53 @@
-import React, { useEffect, useState } from 'react'
-import Heading from '../components/Heading';
-import LeftSidebar from '../components/LeftSidebar';
-import axios from 'axios';
-import { NavLink } from 'react-router-dom';
-import sun from '../images/icons8-light-on-48.png'
-import moon from '../images/icons8-reflector-bulb-48.png'
-import home from '../images/icons8-home-48.png'
+import React, { useState,useEffect } from 'react'
+import axios from 'axios'
+import {NavLink} from 'react-router-dom'
 import sessionlogintimer from '../images/../images/5228679.jpg'
 import Footer from '../components/Footer';
-import ContentPage from '../components/ContentPage';
+import home from '../images/icons8-home-48.png'
+import sun from '../images/icons8-light-on-48.png'
+import moon from '../images/icons8-reflector-bulb-48.png'
+import Heading from '../components/Heading'
+import Createblogcontent from '../components/Createblogcontent';
 
 
-const Home = () => {
-  
-  const [dark,setDark]=useState(false);
-  const [isLoggedIn,setLogin]=useState(false);
- 
-  useEffect(()=> {
-     
-    return async()=>{const token=localStorage.getItem('token');
-    if (token) {
-      const headers = {
-        Authorization: `Bearer ${token}`, 
-      };
-  
-      try {
-        const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
-        if (response.data.success) {
-          setLogin(true);
-          console.log("yes",response);
+
+
+const CreateBlog = () => {
+const [isloading,setloading]=useState(false);
+const [isLoggedIn,setLogin]=useState(false);
+const [dark,setDark]=useState(false);
+const [payload, setPayload] = useState({});
+
+useEffect(() => {
+
+    const fetchData = async () => {
+      const token = localStorage.getItem('token');
+    
+      if (token) {
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        try {
+          setloading(true);
+          const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
+         setloading(false);
+          if (response.data.success) {
+            
+            setLogin(true);
+            setPayload( response.data.payload ); // Set payload on first render
+            
+            
+          }
+        } catch (error) {
+          
+          console.error('Error verifying token:', error);
+          // Error occurred, loading is complete
         }
-      } catch (error) {
-        console.error('Error verifying token:', error);
-
       }
-    }}
+    };
+
+    fetchData();
   }, []); 
 
   const brightness = () => {
@@ -45,32 +58,27 @@ const Home = () => {
     setDark(true);
   }
 
-
   return (
-   
-    <div >
-    {isLoggedIn?
-    <div className='flex flex-col overflow-y-hidden gap-[30px] w-screen'>
-    <div><Heading dark={dark} setDark={setDark} isLoggedIn={isLoggedIn} setLogin={setLogin} /></div>
+    <div className='w-screen h-auto relative '>
+
+   {isloading ? "loading" :
+   <>
+   {isLoggedIn?(
+     <div className='flex flex-col gap-[30px]'>
+
+          <Heading setDark={setDark} setLogin={setLogin} isLoggedIn={isLoggedIn}/>
+           
+           <Createblogcontent payload={payload} isLoggedIn={isLoggedIn} setLogin={setLogin} />
+           
+           <Footer/>
      
-     <div className='flex gap-[10px]  w-screen h-auto'>
+
+
+   </div>
        
-       <LeftSidebar />
-      
-      <ContentPage />
+     ) :
+     (<div className='w-full flex flex-col gap-[30px] items-center'>
        
-
-    
-
-     </div>
-
-  
-    <Footer />
-  
-  </div>
-  :
-  <div className='w-full flex flex-col gap-[30px] items-center'>
-        {/* <Heading setDark={setDark} dark={dark} /> */}
 
         <div className='heading h-[100px] w-full flex justify-between  md:h-[120px] relative bg-gradient-to-r from-cyan-500 to-blue-500 px-4  items-center shadow-lg'>
     {
@@ -121,9 +129,17 @@ const Home = () => {
        </div>
 
        <Footer />
-    </div>}
-  </div>
+    </div>
+ )
+
+  }</>
+   
+   }
+   
+
+</div>
   )
 }
 
-export default Home;
+
+export  default CreateBlog;
