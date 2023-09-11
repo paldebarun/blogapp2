@@ -9,13 +9,18 @@ import home from '../images/icons8-home-48.png'
 import sessionlogintimer from '../images/../images/5228679.jpg'
 import Footer from '../components/Footer';
 import ContentPage from '../components/ContentPage';
-
+import menu from '../images/burger-menu.png'
 
 const Home = () => {
   
   const [dark,setDark]=useState(false);
   const [isLoggedIn,setLogin]=useState(false);
+  const [burgermenu,setmenu]=useState(true);
  
+const setsidebar= ()=>{
+  setmenu(!burgermenu);
+}
+
   useEffect(()=> {
      
     return async()=>{const token=localStorage.getItem('token');
@@ -50,14 +55,19 @@ const Home = () => {
    
     <div >
     {isLoggedIn?
-    <div className='flex flex-col overflow-y-hidden gap-[30px] w-screen'>
+    <div className='flex flex-col overflow-y-hidden gap-[30px]  w-screen'>
     <div><Heading dark={dark} setDark={setDark} isLoggedIn={isLoggedIn} setLogin={setLogin} /></div>
      
-     <div className='flex gap-[10px]  w-screen h-auto'>
+     <div className='flex relative justify-evenly overflow-x-hidden  w-screen h-screen overflow-y-scroll '>
        
-       <LeftSidebar />
+
+       
+
+       {
+        burgermenu ? <img src={menu} onClick={setsidebar} className='   hover:cursor-pointer w-[50px] h-[50px] absolute left-[20px]'  />:<LeftSidebar setmenu={setmenu} /> 
+       }
       
-      <ContentPage />
+      <ContentPage burgermenu={burgermenu}/>
        
 
     
@@ -70,7 +80,7 @@ const Home = () => {
   </div>
   :
   <div className='w-full flex flex-col gap-[30px] items-center'>
-        {/* <Heading setDark={setDark} dark={dark} /> */}
+      
 
         <div className='heading h-[100px] w-full flex justify-between  md:h-[120px] relative bg-gradient-to-r from-cyan-500 to-blue-500 px-4  items-center shadow-lg'>
     {

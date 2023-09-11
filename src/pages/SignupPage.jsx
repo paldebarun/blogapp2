@@ -16,7 +16,7 @@ const SignupPage = () => {
       <div className='h-[50px]'></div>
       
       <div className='flex flex-col items-center'>
-      <NavLink to='/home'> <img src={logo} className='w-[200px] h-auto hover:shadow-xl rounded-full' /> </NavLink>
+      <NavLink to='/home'> <img src={logo} className=' animate-spin w-[200px] h-auto hover:shadow-xl rounded-full' /> </NavLink>
       
 
       <h1 className=" text-md sm:text-3xl font-bold text-center text-slate-400">

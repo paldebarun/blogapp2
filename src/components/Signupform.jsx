@@ -3,10 +3,13 @@ import visible from '../images/icons8-eye-24.png';
 import invisible from '../images/icons8-invisible-24.png';
 import countryNames from '../constants/countryNames';
 import loginSymbol from '../images/icons8-right-arrow-30.png';
-import axios from 'axios';
-import {toast} from 'react-hot-toast';
+
+
 
 const Signupform = ({ dark }) => {
+
+  
+
   const [form, formHandler] = useState({
     firstName: "",
     lastName: "",
@@ -27,41 +30,16 @@ const Signupform = ({ dark }) => {
         [name]: value,
       };
     });
+
+    console.log(form)
   };
 
   const submitform = async(event) => {
     event.preventDefault();
+    localStorage.setItem('form', JSON.stringify(form));
+
     
-
-    try {
-      const response = await axios.post('http://localhost:4000/api/v1/signup', form);
-  
-      if (response.status === 200) {
-        console.log('Signup successful');
-        // Handle success (e.g., show a success message)
-      } 
-      else if(response.status===409){
-        console.log("conflict");
-      }
-      else {
-        console.log('Signup failed');
-        // Handle failure (e.g., show an error message)
-      }
-      
-      toast.success('This is a success toast!', {
-        duration: 2000, 
-        position: 'top',
-      });
-      window.location.href = '/success';
-     
-
-    } catch (error) {
-      console.error('An error occurred:', error);
-      // Handle error (e.g., show an error message)
-    }
-
-   
-
+    window.location.href = '/otp-generate';
 
   };
 
@@ -72,7 +50,9 @@ const Signupform = ({ dark }) => {
   };
 
   return (
-    <form
+    <div>
+     
+     <form
       onSubmit={submitform}
       className="flex flex-col scale-75  gap-5 w-[300px] px-4 sm:w-[400px] items-center m-auto"
     >
@@ -98,7 +78,7 @@ const Signupform = ({ dark }) => {
           <img
             src={isVisiblle ? visible : invisible}
             alt='visibility icon'
-            className={dark?'w-[20px] h-[20px] invert hover:cursor-pointer ':'w-[20px] h-[20px] hover:cursor-pointer invert'}
+            className={dark?'w-[20px] h-[20px] invert hover:cursor-pointer ':'w-[20px] h-[20px] hover:cursor-pointer '}
             onClick={handler}
           />
         </div>
@@ -144,6 +124,10 @@ const Signupform = ({ dark }) => {
         />
       </button>
     </form>
+
+     
+
+    </div>
   );
 };
 

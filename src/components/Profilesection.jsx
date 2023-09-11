@@ -10,6 +10,7 @@ import edit from '../images/icons8-edit-30.png'
 
 const Profilesection = ({ payload }) => {
   const [profile, setProfile] = useState({
+    _id:"",
     imageUrl: "",
     username: "",
     pseudonym: "",
@@ -26,12 +27,18 @@ const Profilesection = ({ payload }) => {
     const fetchData = async () => {
       if (payload) {
         try {
+          console.log("this is payload",payload);
           console.log("profile section initiated");
           const url = `http://localhost:4000/api/v1/fetchprofile/${payload.email}`;
           const response = await axios.get(url);
           console.log("this is response : ", response);
-          setProfile(response.data.profile);
-          console.log("this is profile : ", profile);
+          const fetchedprofile=response.data.profile;
+          console.log("this is profile ",fetchedprofile);
+
+        
+          setProfile(fetchedprofile);
+          console.log("this is new profile : ", profile);
+          console.log("image url : ",profile.imageurl);
           
         } catch (error) {
           console.error('Error fetching profile:', error);
@@ -45,7 +52,7 @@ const Profilesection = ({ payload }) => {
     <div className='flex flex-col h-auto items-center gap-[20px] p-7  '>
         
         <div className='image-username w-full  flex flex-col items-center gap-[5px] sm:gap-[20px]  '>
-         <img src={profile.imageUrl ? profile.imageUrl : imageplaceholder} className='w-[100px] h-[100px]  sm:w-[150px] sm:h-[150px] rounded-full'/>
+         <img src={profile.imageurl ? profile.imageurl : imageplaceholder} className='w-[100px] h-[100px]  sm:w-[150px] sm:h-[150px] rounded-full object-cover'/>
          <div className='w-auto  text-slate-600 text-2xl sm:text-5xl p-3'>
          {
            profile.username ? profile.username : "User Name"
@@ -108,6 +115,11 @@ const Profilesection = ({ payload }) => {
         </div>
 
         <div className='h-[100px]'></div>
+
+        <NavLink to='/userblogs' className='border rounded-lg p-3 hover:scale-105 duration-150 hover:shadow-lg bg-gradient-to-r from-sky-300 to bg-sky-200 text-blue-700' >
+            See your uploaded blogs
+           </NavLink>
+
         <NavLink to='/editbio' className='flex gap-[10px] hover:shadow-xl hover:scale-105 duration-150 bg-emerald-400 px-8 py-4 rounded-[30px]' >
            
          <img src={edit} />

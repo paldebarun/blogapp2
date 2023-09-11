@@ -1,30 +1,26 @@
 import React from 'react'
-import Heading from '../components/Heading';
-import  LoginForm  from '../components/LoginForm';
 import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
 import sun from '../images/icons8-light-on-48.png'
 import moon from '../images/icons8-reflector-bulb-48.png'
 import home from '../images/icons8-home-48.png'
-import logo from '../images/CU blogs-logos_black.png'
+import { useState } from 'react';
+import timeouticon from '../images/out-of-time.png'
 import Footer from '../components/Footer';
 
-
- const LoginPage = () => {
-
-  const [dark,setDark]=useState(false);
+ const Otpexpirepage = () => {
+    const [dark,setDark]=useState(false);
   
-  const brightness = () => {
-    setDark(false);
-  }
-
-  const darkness = () => {
-    setDark(true);
-  }
   
+    const brightness = () => {
+      setDark(false);
+    }
+  
+    const darkness = () => {
+      setDark(true);
+    }
+
   return (
-    <div className='flex flex-col gap-[50px]'>
-
+    <div className='w-screen h-auto flex items-center flex-col gap-[200px]'>
      <div className='heading h-[100px] w-full flex justify-between  md:h-[120px] relative bg-gradient-to-r from-cyan-500 to-blue-500 px-4  items-center shadow-lg'>
     {
       dark ? (
@@ -52,27 +48,14 @@ import Footer from '../components/Footer';
       )
 
     }
-        </div>
-      
-      <div className='flex flex-col items-center'>
-      <div className='w-'>
-      <NavLink to='/home'> <img src={logo} className='animate-spin  w-[200px] h-auto hover:shadow-xl rounded-full' /> </NavLink>
-      </div>
-      
-
-     <div className='w-full'>
-     <h1 className='text-center font-bold text-3xl text-slate-400'>Login to CU Blogs</h1>
-     <LoginForm dark={dark}/>
-      <p className={dark?'text-center text-white ':'text-center text-black'}>If not registered ! 
-      <NavLink to='/signup' className='text-blue-600 '> SignUp</NavLink></p>
      </div>
-
-
-      </div>
-
-     <Footer />
+       
+       <img src={timeouticon} className='w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[500px] md:h-[500px]' />
+       <div className='text-3xl sm:text-5xl text-center w-full text-red-500 font-bold'>Otp Expired !</div>
+      <NavLink to='/otp-generate' className='text-sky-500' >send otp again</NavLink>
+       <Footer />
     </div>
   )
 }
 
-export default LoginPage;
+export default Otpexpirepage;

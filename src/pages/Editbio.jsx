@@ -11,19 +11,25 @@ import axios from 'axios'
 import save from '../images/icons8-save-50.png'
 import Heading from '../components/Heading';
 import sessionlogintimer from '../images/../images/5228679.jpg'
+import loading from '../images/loading.png'
 
 
 
 const Editbio = () => {
   const [dark, setDark] = useState(false);
   const [isLoggedIn,setLogin]=useState(false);
+  const [isloading,setLoading]=useState(false);
+  
 
   const submitHandler= async (event) => {
     event.preventDefault();
 
     try {
+      setLoading(true);
       const response = await axios.post('http://localhost:4000/api/v1/updateProfile', formdata);
-      console.log("this is the response", response);
+      console.log("this is the response1", response);
+       
+      setLoading(false);
 
       // Redirect after successful submission
       window.location.href = '/dashboard';
@@ -38,7 +44,7 @@ const Editbio = () => {
 
       const token = localStorage.getItem('token');
 
-
+     setLoading(true);
       if (token) {
 
         const headers = {
@@ -48,24 +54,30 @@ const Editbio = () => {
         const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
 
         if(response.data.success){
+          
           setLogin(true);
         }
-
+        
 
 
         const payload = response.data.payload;
-
+ 
 
         const url = `http://localhost:4000/api/v1/fetchprofile/${payload.email}`;
         const response_second = await axios.get(url);
 
+
+        setLoading(false);
+
+        console.log("this is second-response : ",response_second);
 
         const profile = response_second.data.profile;
         console.log("this is profile : ", profile);
 
         const obj = {
           _id:profile._id,
-          imageUrl: profile.imageUrl,
+          url:profile.imageurl,
+          imageUrl:"",
           username: profile.username,
           pseudonym: profile.pseudonym,
           job: profile.job,
@@ -75,10 +87,15 @@ const Editbio = () => {
 
 
         }
+    
 
-        console.log("this is obj : ", obj);
+        
+        
 
         setformdata(obj);
+
+       
+       console.log("this is formdata at first render : ",formdata);
 
       }
 
@@ -96,6 +113,7 @@ const Editbio = () => {
 
   const [formdata, setformdata] = useState({
     _id:"",
+    url:"",
     imageUrl: "",
     username: "",
     pseudonym: "",
@@ -155,26 +173,29 @@ const Editbio = () => {
 
   const uploadFile = async () => {
     try {
-      const files = {
-        imageFile: formdata.imageUrl,
-      };
-  
-      console.log('Sending files:', files); // Add this line for debugging
-  
-      const response = await axios.post('http://localhost:4000/api/v1/uploadPhoto', files);
-  
+      const formData = new FormData();
+      formData.append('imageFile', formdata.imageUrl); // Append the File object
+       setLoading(true);
+      const response = await axios.post('http://localhost:4000/api/v1/uploadPhoto', formData);
+      setLoading(false);
       console.log('Image uploaded to Cloudinary:', response);
-      const imgUrl=response.data.imageUrl;
-      setformdata((prev) => ({
+      const url = response.data.imageUrl;
+      console.log("this is url  : ",url);
+      setformdata((prev)=>({
         ...prev,
-        imageUrl: imgUrl,
-      }))
+        url:url
+      }));
+      
 
+      console.log(formdata);
+
+     
     } catch (error) {
       console.error('Error uploading image:', error);
       // Handle error cases here
     }
   };
+  
   
 
  
@@ -183,15 +204,21 @@ const Editbio = () => {
      <div>
       {
         isLoggedIn ? (
-          <div className='w-screen flex flex-col gap-[50px]' >
+             isloading ? (
+              <div className='w-screen h-screen flex justify-center items-center flex-col'>
+                <img src={loading} className=' w-[100px] h-[100px] animate-spin' />
+                <div className='font-bold text-slate-400 font-mono text-center'> Loading please wait ... </div>
+              </div>
+             ):(
+              <div className='w-screen flex flex-col gap-[50px]' >
           <Heading dark={dark} setDark={setDark} isLoggedIn={isLoggedIn} setLogin={setLogin} />
       
       <div className='p-4 flex flex-col gap-[20px]'>
         <div className='edit-image flex flex-col gap-[20px] w-full items-center'>
           <img
-            src={imageUrlPreview ? imageUrlPreview : imageplaceholder}
+            src={formdata.url? formdata.url  : (imageUrlPreview ? imageUrlPreview : imageplaceholder)}
             alt="Image Preview"
-            className="w-[100px] h-[100px] sm:w-[200px] sm:h-[200px] lg:w-[200px] lg:h-[200px] rounded-full"
+            className="w-[100px] object-cover h-[100px] sm:w-[200px] sm:h-[200px] lg:w-[200px] lg:h-[200px] rounded-full"
           />
           <div className='w-full mx-auto flex flex-col gap-[20px] items-center'>
             <input
@@ -203,7 +230,7 @@ const Editbio = () => {
               className='hover:cursor-pointer text-sm w-[200px]'
             />
 
-            <button  onClick={uploadFile}>
+            <button  onClick={uploadFile} className='border  p-3 rounded-lg bg-slate-300 text-slate-500 hover:scale-110 duration-150 hover:shadow-lg '>
               Upload image
             </button>
           </div>
@@ -255,7 +282,10 @@ const Editbio = () => {
 
       <Footer />
       
-      </div>):(
+      </div>
+             )
+
+          ):(
       
         <div className='w-full flex flex-col gap-[30px] items-center'>
         {/* <Heading setDark={setDark} dark={dark} /> */}

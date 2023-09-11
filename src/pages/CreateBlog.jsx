@@ -8,7 +8,7 @@ import sun from '../images/icons8-light-on-48.png'
 import moon from '../images/icons8-reflector-bulb-48.png'
 import Heading from '../components/Heading'
 import Createblogcontent from '../components/Createblogcontent';
-
+import loading from '../images/loading.png'
 
 
 
@@ -31,7 +31,7 @@ useEffect(() => {
         try {
           setloading(true);
           const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
-         setloading(false);
+         
           if (response.data.success) {
             
             setLogin(true);
@@ -39,6 +39,8 @@ useEffect(() => {
             
             
           }
+
+          setloading(false);
         } catch (error) {
           
           console.error('Error verifying token:', error);
@@ -61,10 +63,18 @@ useEffect(() => {
   return (
     <div className='w-screen h-auto relative '>
 
-   {isloading ? "loading" :
-   <>
+   
+   <div>
    {isLoggedIn?(
-     <div className='flex flex-col gap-[30px]'>
+
+     isloading ? (
+      <div className='w-screen h-screen flex justify-center items-center flex-col'>
+                <img src={loading} className=' w-[100px] h-[100px] animate-spin' />
+                <div className='font-bold text-slate-400 font-mono text-center'> Loading please wait ... </div>
+              </div>
+
+     ):(
+      <div className='flex flex-col gap-[30px]'>
 
           <Heading setDark={setDark} setLogin={setLogin} isLoggedIn={isLoggedIn}/>
            
@@ -75,6 +85,7 @@ useEffect(() => {
 
 
    </div>
+     )
        
      ) :
      (<div className='w-full flex flex-col gap-[30px] items-center'>
@@ -132,9 +143,9 @@ useEffect(() => {
     </div>
  )
 
-  }</>
+  }</div>
    
-   }
+   
    
 
 </div>
