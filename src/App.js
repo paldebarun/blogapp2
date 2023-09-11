@@ -1,7 +1,7 @@
 
 import './App.css';
-import {Routes, Route} from 'react-router-dom'
-import Home  from './pages/Home'
+import { Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage';
 import Dashboard from './pages/Dashboard';
@@ -21,25 +21,25 @@ function App() {
 
   return (
     <div >
-   <Routes>
-   <Route path='/' element={<Basepage/>}/>
-     <Route path='/home' element={<Home/>}/>
-     <Route path='/login' element={<LoginPage/>}/>
-     <Route path='/signup' element={<SignupPage/>}/>
-     <Route path='/dashboard' element={<Dashboard/>}/>
-     <Route path='/editbio' element={<Editbio/>}/>
-     <Route path="/success" element={<SuccessSignupPage/>} />
-     <Route path="/errorlogin" element={<ErrorLoginPage/>} />
-     <Route path='/add' element={<CreateBlog/>}/>
-     <Route path='/userblogs' element={<Userblogs/>}/>
-     <Route path='/otp-page' element={<Otpage/>}/>
-     <Route path='/otp-expired' element={<Otpexpirepage/>}/>
-     <Route path='/otp-generate' element={<Otpgeneratepage/>}/>
-     <Route path="/unsuccessful_signup" element={<Unsuccessfullsignup/>} />
+      <Routes>
+        <Route path='/' element={<Basepage />} />
+        <Route path='/home' element={<Home />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/signup' element={<SignupPage />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/editbio' element={<Editbio />} />
+        <Route path="/success" element={<SuccessSignupPage />} />
+        <Route path="/errorlogin" element={<ErrorLoginPage />} />
+        <Route path='/add' element={<CreateBlog />} />
+        <Route path='/userblogs' element={<Userblogs />} />
+        <Route path='/otp-page' element={<Otpage />} />
+        <Route path='/otp-expired' element={<Otpexpirepage />} />
+        <Route path='/otp-generate' element={<Otpgeneratepage />} />
+        <Route path="/unsuccessful_signup" element={<Unsuccessfullsignup />} />
 
-   </Routes>
-  
-    </div> 
+      </Routes>
+
+    </div>
 
 
   );

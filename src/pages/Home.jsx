@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Heading from '../components/Heading';
-import LeftSidebar from '../components/LeftSidebar';
+import LeftSidebar from '../components/LeftSidebar.jsx';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import sun from '../images/icons8-light-on-48.png'
