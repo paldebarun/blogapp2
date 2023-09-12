@@ -35,13 +35,13 @@ const setsidebar= ()=>{
       try {
         
         const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
-        console.log("this is login response : ",response);
+        // console.log("this is login response : ",response);
          
         if (response.data.success) {
           
           setLogin(true);
-          console.log("yes",response);
-          console.log("this is logged in status ", true);
+          // console.log("yes",response);
+          // console.log("this is logged in status ", true);
           
         }
         

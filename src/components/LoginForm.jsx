@@ -3,9 +3,9 @@ import visible from '../images/icons8-eye-24.png';
 import invisible from '../images/icons8-invisible-24.png';
 import loginSymbol from '../images/icons8-right-arrow-30.png';
 import axios from 'axios';
-import { toast } from 'react-hot-toast';
 
-const LoginForm = ({ dark }) => {
+
+const LoginForm = ({ dark ,setLoading}) => {
   const [isVisible, setVisibility] = useState(false);
   const [form, setForm] = useState({
     email: '',
@@ -25,29 +25,29 @@ const LoginForm = ({ dark }) => {
     event.preventDefault();
    
     try {
+
+      setLoading(true);
       const response = await axios.post('http://localhost:4000/api/v1/login', form);
       
       if (response.status === 200) {
         localStorage.setItem('token', response.data.user.token);
-        // toast.success('Login successful!', {
-        //   duration: 2000,
-          
-        // });
+
+        setLoading(false);
+        
        
         window.location.href = '/home';
-        toast.success("Logged in succesfully")
-      } else {
-        toast.error('Login failed. Please try again.', {
-          duration: 2000,
-          position: 'top-right',
-        });
+        
+
+        
+      } 
+      else {
+        setLoading(false);
+        window.location.href='/errorlogin'
       }
     } catch (error) {
+      setLoading(false);
       console.error('Error in logging in', error);
-      // toast.error('An error occurred while logging in. Please try again later.', {
-      //   duration: 2000,
-      //   position: 'top-right',
-      // });
+      
 
       window.location.href='/errorlogin'
     }
