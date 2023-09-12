@@ -26,7 +26,7 @@ const deleteBlog = async (_id) => {
       id:_id
     }
     setLoading(true);
-    const response = await axios.post(`http://localhost:4000/api/v1/deleteBlog`,obj);
+    const response = await axios.post(`https://blog-server-gbxk.onrender.com/api/v1/deleteBlog`,obj);
     setLoading(false);
     console.log("delete response: ", response);
     window.location.reload();
@@ -50,7 +50,7 @@ useEffect(() => {
         Authorization: `Bearer ${token}`,
       };
      setLoading(true);
-      const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
+      const response = await axios.get('https://blog-server-gbxk.onrender.com/api/v1/auth', { headers });
      console.log("response : ",response);
       if(response.data.success){
         console.log("this is it");
@@ -62,7 +62,7 @@ useEffect(() => {
       const payload = response.data.payload;
       console.log("payload : ",payload);
       
-      const url = `http://localhost:4000/api/v1/userblogs/${payload.email}`;
+      const url = `https://blog-server-gbxk.onrender.com/api/v1/userblogs/${payload.email}`;
       const response_second = await axios.get(url);
      
 

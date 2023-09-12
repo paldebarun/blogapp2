@@ -77,13 +77,13 @@ import Spinner from '../components/Spinner';
       try{
         
         setloading(true);
-        const otpresponse=await axios.post('http://localhost:4000/api/v1/checkotp',otpformbody);
+        const otpresponse=await axios.post('https://blog-server-gbxk.onrender.com/api/v1/checkotp',otpformbody);
         console.log("otp response : ",otpresponse);
         setloading(false);
 
         if(otpresponse.data.success){
             setloading(true);
-          const response = await axios.post('http://localhost:4000/api/v1/signup', form);
+          const response = await axios.post('https://blog-server-gbxk.onrender.com/api/v1/signup', form);
           setloading(false);
   
       if (response.status === 200) {

@@ -39,7 +39,7 @@ import note from '../images/icons8-note-64.png'
         event.preventDefault();
     
         try {
-          const response = await axios.post('http://localhost:4000/api/v1/createblog', formdata);
+          const response = await axios.post('https://blog-server-gbxk.onrender.com/api/v1/createblog', formdata);
           console.log("this is the response", response);
          
          

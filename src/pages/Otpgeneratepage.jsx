@@ -44,7 +44,7 @@ const Otpgeneratepage = () => {
 
           setloading(true);
          
-           const response=await axios.post('http://localhost:4000/api/v1/sendOtp',mail);
+           const response=await axios.post('https://blog-server-gbxk.onrender.com/api/v1/sendOtp',mail);
            console.log("response : ",response);
 
            setloading(false);

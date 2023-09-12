@@ -27,7 +27,7 @@ const LoginForm = ({ dark ,setLoading}) => {
     try {
 
       setLoading(true);
-      const response = await axios.post('http://localhost:4000/api/v1/login', form);
+      const response = await axios.post('https://blog-server-gbxk.onrender.com/api/v1/login', form);
       
       if (response.status === 200) {
         localStorage.setItem('token', response.data.user.token);

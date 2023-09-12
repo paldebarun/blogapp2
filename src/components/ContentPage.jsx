@@ -26,7 +26,7 @@ const ContentPage = ({burgermenu}) => {
           Authorization: `Bearer ${token}`,
         };
         setLoading(true);
-        const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
+        const response = await axios.get('https://blog-server-gbxk.onrender.com/api/v1/auth', { headers });
        console.log("response : ",response);
         if(response.data.success){
 
@@ -40,7 +40,7 @@ const ContentPage = ({burgermenu}) => {
         console.log("payload : ",payload);
          
         setLoading(true);
-        const url = `http://localhost:4000/api/v1/fetchallblogs`;
+        const url = `https://blog-server-gbxk.onrender.com/api/v1/fetchallblogs`;
         const response_second = await axios.get(url);
   
        
