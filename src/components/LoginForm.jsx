@@ -18,14 +18,15 @@ const LoginForm = ({ dark }) => {
       ...prev,
       [name]: value,
     }));
+    console.log(form);
   };
 
   const submitForm = async (event) => {
     event.preventDefault();
-
+   
     try {
       const response = await axios.post('http://localhost:4000/api/v1/login', form);
-
+      
       if (response.status === 200) {
         localStorage.setItem('token', response.data.user.token);
         // toast.success('Login successful!', {
