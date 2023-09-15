@@ -11,6 +11,9 @@ const ContentPage = ({ burgermenu }) => {
   const [blogs, setBlogs] = useState([]);
   const [isloading, setLoading] = useState(false);
   const [payload, setPayload] = useState({});
+  const [likecontainer,setLikeContainer]=useState(false);
+  const [likedAuthors, setLikedAuthors] = useState([]); // State to store liked authors
+  const [selectedBlogId, setSelectedBlogId] = useState(null);
   
   // Create an array of islike states, one for each blog
   const [islikeArray, setIsLikeArray] = useState([]);
@@ -79,6 +82,26 @@ const ContentPage = ({ burgermenu }) => {
 
   const darkness = () => {
     setDark(true);
+  }
+
+
+  const likecontainerhandler = async (blogId) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(`http://localhost:4000/api/v1/fetchlikesauthernames`,{blog_id:blogId});
+
+      console.log(response);
+      if (response.data.success) {
+       
+        setLikedAuthors(response.data.authorNames);
+        setSelectedBlogId(blogId); 
+        setLikeContainer(true); 
+      }
+      setLoading(false);
+    }
+     catch (error) {
+      console.error(error);
+    }
   }
 
   const likebutton = async (blogid, index) => { // Pass the index of the blog
@@ -156,7 +179,7 @@ const ContentPage = ({ burgermenu }) => {
           <div className='flex flex-col w-full  gap-[10px]   md:gap-[20px]'>
             <img src={blogicon} className='sm:w-[100px] w-[70px] h-[70px] sm:h-[100px] mx-auto animate-pulse' />
             {blogs.map((blog, index) => (
-              <div className='p-7 sm:scale-90 lg:scale-100 shadow-xl border rounded-lg h-auto flex flex-col items-start gap-[20px]   w-[50%] break-words mx-auto text-2xl' key={blog._id} >
+              <div className='p-7 sm:scale-90 lg:scale-100 shadow-xl border rounded-lg h-auto flex flex-col items-start gap-[20px]  relative  w-[50%] break-words mx-auto text-2xl' key={blog._id} >
                 <h3 className='font-bold text-blue-900 text-sm sm:text-md'>{blog.heading}</h3>
                 <div className=' flex flex-col md:flex-row gap-[10px]'>
                   <div className='text-red-700 font-mono text-sm sm:text-md'>Author:</div>
@@ -174,9 +197,28 @@ const ContentPage = ({ burgermenu }) => {
                   <div className='text-red-700 text-sm sm:text-md'>Date : </div>
                   <div className='text-slate-500 text-sm sm:text-md'> {new Date(blog.date).toLocaleDateString()}</div>
                 </div>
-                <div className='hover:cursor-pointer'>
+                <div className='hover:cursor-pointer flex gap-[20px]'>
                   <img src={islikeArray[index] ? like : not_liked} onClick={() => likebutton(blog._id, index)} />
+                  <p onClick={() => likecontainerhandler(blog._id)} className='hover:cursor-pointer text-sky-400'>See Likes</p>
+                 
+
+                  <div>
+
+                  {likecontainer && selectedBlogId === blog._id && (
+              <div className="liked-authors">
+                <h3>Liked by:</h3>
+                <ul>
+                  {likedAuthors.map((author, authorIndex) => (
+                    <li key={authorIndex}>{author}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+                    
+                  </div>
+                  
                 </div>
+
                 <div className="tags  flex-wrap  sm:w-[200px] wrap flex-row gap-[2px]  ">
                   {blog.tags.map((tag, index) => (
                     <div className='flex gap-[5px] w-full items-center'>
