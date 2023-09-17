@@ -5,18 +5,108 @@ import nodatafoundimage from '../images/9214777.jpg';
 import loading from '../images/loading.png';
 import like from '../images/heart.png';
 import not_liked from '../images/heart copy.png';
+import comment_icon from '../images/icons8-comment-48.png'
+import sendicon from '../images/icons8-send-16.png'
 
 const ContentPage = ({ burgermenu }) => {
   const [dark, setDark] = useState(false);
   const [blogs, setBlogs] = useState([]);
   const [isloading, setLoading] = useState(false);
   const [payload, setPayload] = useState({});
-  const [likecontainer,setLikeContainer]=useState(false);
-  const [likedAuthors, setLikedAuthors] = useState([]); // State to store liked authors
+  const [likecontainer, setLikeContainer] = useState(false);
+  const [likedAuthors, setLikedAuthors] = useState([]);
   const [selectedBlogId, setSelectedBlogId] = useState(null);
-  
-  // Create an array of islike states, one for each blog
+  const [commentBoxOpen, setCommentBoxOpen] = useState({});
   const [islikeArray, setIsLikeArray] = useState([]);
+  const [blogComments, setBlogComments] = useState({});
+  const [newComment, setNewComment] = useState('');
+
+
+  useEffect(() => {
+    const initialCommentBoxOpen = {};
+    blogs.forEach((blog) => {
+      initialCommentBoxOpen[blog._id] = false;
+    });
+    setCommentBoxOpen(initialCommentBoxOpen);
+  }, [blogs]);
+
+
+  const commentsectionhandler = async (blogId) => {
+
+    try {
+      
+      if (!blogComments[blogId]) {
+        setLoading(true);
+        const response = await axios.post(`http://localhost:4000/api/v1/fetchcomments`, { blog_id: blogId });
+        console.log(response);
+        if (response.data.success) {
+          setBlogComments((prevComments) => ({
+            ...prevComments,
+            [blogId]: response.data.comments,
+          }));
+        }
+
+        setLoading(false);
+      }
+
+      setCommentBoxOpen((prevState) => ({
+        ...prevState,
+        [blogId]: !prevState[blogId],
+      }));
+
+      console.log(blogComments);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCommentChange = (e) => {
+    setNewComment(e.target.value);
+  };
+
+
+
+  const addComment = async (blogId) => {
+    try {
+      if (!newComment) {
+        
+        return;
+      }
+
+      setLoading(true);
+      
+
+      const response = await axios.post('http://localhost:4000/api/v1/addcomment', {
+        id: blogId,
+        email: payload.email,
+        body: newComment, 
+      });
+     console.log("the add comment response : ",response);
+      if (response.data.success) {
+       
+        setBlogComments((prevComments) => ({
+          ...prevComments,
+          [blogId]: [...(prevComments[blogId] || []), response.data.comment],
+        }));
+
+        
+        setNewComment('');
+
+      }
+
+      window.location.reload();
+
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+
+
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,18 +178,18 @@ const ContentPage = ({ burgermenu }) => {
   const likecontainerhandler = async (blogId) => {
     try {
       setLoading(true);
-      const response = await axios.post(`http://localhost:4000/api/v1/fetchlikesauthernames`,{blog_id:blogId});
+      const response = await axios.post(`http://localhost:4000/api/v1/fetchlikesauthernames`, { blog_id: blogId });
 
       console.log(response);
       if (response.data.success) {
-       
         setLikedAuthors(response.data.authorNames);
-        setSelectedBlogId(blogId); 
-        setLikeContainer(true); 
+        setSelectedBlogId(blogId);
+
+        // Toggle the like container's visibility by inverting the current state
+        setLikeContainer((prevContainer) => !prevContainer);
       }
       setLoading(false);
-    }
-     catch (error) {
+    } catch (error) {
       console.error(error);
     }
   }
@@ -142,6 +232,8 @@ const ContentPage = ({ burgermenu }) => {
         }
 
         setLoading(false);
+
+        window.location.reload();
       } else {
         setLoading(true);
         const response = await axios.post(
@@ -161,11 +253,16 @@ const ContentPage = ({ burgermenu }) => {
         }
 
         setLoading(false);
+
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);
     }
   }
+
+
+
 
   return (
     <div className={burgermenu ? 'flex flex-col  gap-[60px] w-full  duration-150' : 'flex flex-col gap-[60px] w-full mr-[40px] opacity-30 duration-150'}>
@@ -187,7 +284,7 @@ const ContentPage = ({ burgermenu }) => {
                 </div>
                 <div className='flex w-full flex-col gap-[10px] sm:flex-row  '>
                   <div className='text-red-700 font-mono text-sm sm:text-md'> Content </div>
-                  <textarea className='border lg:w-[1200px] sm:w-[700px] text-center h-[200px] rounded-lg text-sm sm:text-md text-slate-500'>{blog.content}</textarea>
+                  <div className='border overflow-y-scroll lg:w-[1200px] sm:w-[700px] text-center h-[200px] rounded-lg text-sm sm:text-md text-slate-500'>{blog.content}</div>
                 </div>
                 <div className='flex flex-col md:flex-row gap-[10px]'>
                   <div className='text-red-700 text-xs sm:text-md'>Category : </div>
@@ -197,27 +294,72 @@ const ContentPage = ({ burgermenu }) => {
                   <div className='text-red-700 text-sm sm:text-md'>Date : </div>
                   <div className='text-slate-500 text-sm sm:text-md'> {new Date(blog.date).toLocaleDateString()}</div>
                 </div>
-                <div className='hover:cursor-pointer flex gap-[20px]'>
-                  <img src={islikeArray[index] ? like : not_liked} onClick={() => likebutton(blog._id, index)} />
-                  <p onClick={() => likecontainerhandler(blog._id)} className='hover:cursor-pointer text-sky-400'>See Likes</p>
-                 
-
-                  <div>
-
-                  {likecontainer && selectedBlogId === blog._id && (
-              <div className="liked-authors">
-                <h3>Liked by:</h3>
-                <ul>
-                  {likedAuthors.map((author, authorIndex) => (
-                    <li key={authorIndex}>{author}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-                    
+                <div className='hover:cursor-pointer flex sm:flex-row flex-col gap-[5px] sm:gap-[20px] items-start sm:items-center justify-between'>
+                  <div className='sm:p-0  w-[20px] h-[20px]'>
+                    <img src={islikeArray[index] ? like : not_liked} onClick={() => likebutton(blog._id, index)} className='w-[20px] h-[20px] ' />
                   </div>
-                  
+                  <div className='flex flex-col gap-[10px] items-start '>
+
+                    <p onClick={() => likecontainerhandler(blog._id)} className='hover:cursor-pointer text-sky-400 text-sm p-4'>See Likes</p>
+                    <div>
+
+                      {likecontainer && selectedBlogId === blog._id && likedAuthors.length > 0 && (
+                        <div className="liked-authors border rounded-md p-4">
+
+                          <h3 className='text-sm'>Liked by:</h3>
+                          <div className='flex flex-col h-[100px] md:w-[200px] lg:w-[400px] overflow-y-scroll'>
+                            {likedAuthors.map((author, authorIndex) => (
+                              <div className='text-sm text-slate-400' key={authorIndex}>{author}</div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+
+
+
+                    </div>
+
+
+                  </div>
+
+
                 </div>
+
+
+
+
+
+
+                <div>
+                  <img
+                    src={comment_icon}
+                    className="hover:cursor-pointer w-[20px] h-[20px]"
+                    onClick={() => commentsectionhandler(blog._id)}
+                  />
+                </div>
+
+                {commentBoxOpen[blog._id] && (
+                  <div className='flex flex-col gap-[5px] h-[300px] overflow-y-scroll flex  border rounded-lg '>
+                    <p className='text-sm p-3'>Comments :</p>
+                    <div className='flex flex-col'>
+                    <div className="comment-section w-[100px]  sm:w-[200px]  text-sm md:w-[300px] flex  lg:w-[450px]   gap-[15px] items-start p-3">
+                      <input type="text"  onChange={handleCommentChange}  className='px-2 border-b-2 outline-none ' placeholder='add your comment here ' />
+                      <img src={sendicon} onClick={()=>{addComment(blog._id)}} className='w-[20px] h-[20px] hover:cursor-pointer' />
+                    </div>
+
+                    {blogComments[blog._id] && blogComments[blog._id].map((comment, commentIndex) => (
+                        <div key={commentIndex} className="comment flex gap-[5px]">
+                        <p className="text-black text-sm p-3">{comment.autherName || 'Unknown Author'}</p>
+                          <p className="text-slate-500 text-sm p-3">{comment.comment_body}</p>
+                          
+                        </div>
+                      ))}
+
+                      </div>
+
+                  </div>
+                )}
 
                 <div className="tags  flex-wrap  sm:w-[200px] wrap flex-row gap-[2px]  ">
                   {blog.tags.map((tag, index) => (
