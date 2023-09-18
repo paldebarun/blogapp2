@@ -7,11 +7,13 @@ import like from '../images/heart.png';
 import not_liked from '../images/heart copy.png';
 import comment_icon from '../images/icons8-comment-48.png'
 import sendicon from '../images/icons8-send-16.png'
+import deletecomment from '../images/icons8-delete-64.png'
 
 const ContentPage = ({ burgermenu }) => {
   const [dark, setDark] = useState(false);
   const [blogs, setBlogs] = useState([]);
   const [isloading, setLoading] = useState(false);
+  const [commentloading,setcommentloading]=useState(false);  
   const [payload, setPayload] = useState({});
   const [likecontainer, setLikeContainer] = useState(false);
   const [likedAuthors, setLikedAuthors] = useState([]);
@@ -30,13 +32,31 @@ const ContentPage = ({ burgermenu }) => {
     setCommentBoxOpen(initialCommentBoxOpen);
   }, [blogs]);
 
+  const reloadcommentbox =async (blogId)=>{
+
+    try {
+      setcommentloading(true);
+      const response = await axios.post(`http://localhost:4000/api/v1/fetchcomments`, { blog_id: blogId });
+      console.log(response);
+      if (response.data.success) {
+        setBlogComments((prevComments) => ({
+          ...prevComments,
+          [blogId]: response.data.comments,
+        }));
+      }
+      setcommentloading(false);
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
 
   const commentsectionhandler = async (blogId) => {
 
     try {
       
       if (!blogComments[blogId]) {
-        setLoading(true);
+        setcommentloading(true);
         const response = await axios.post(`http://localhost:4000/api/v1/fetchcomments`, { blog_id: blogId });
         console.log(response);
         if (response.data.success) {
@@ -46,7 +66,7 @@ const ContentPage = ({ burgermenu }) => {
           }));
         }
 
-        setLoading(false);
+        setcommentloading(false);
       }
 
       setCommentBoxOpen((prevState) => ({
@@ -73,7 +93,7 @@ const ContentPage = ({ burgermenu }) => {
         return;
       }
 
-      setLoading(true);
+      setcommentloading(true);
       
 
       const response = await axios.post('http://localhost:4000/api/v1/addcomment', {
@@ -89,20 +109,36 @@ const ContentPage = ({ burgermenu }) => {
           [blogId]: [...(prevComments[blogId] || []), response.data.comment],
         }));
 
-        
+        console.log("set blog comment",blogComments);
         setNewComment('');
-
+        reloadcommentbox(blogId);
+        
       }
+      
+      
 
-      window.location.reload();
-
-      setLoading(false);
+      setcommentloading(false);
+      
     } catch (error) {
       console.error(error);
     }
   };
 
+  const deletecomment =async(blogId)=>{
 
+try{
+
+
+}
+catch(error){
+
+
+
+
+  
+}
+
+  }
 
 
 
@@ -340,7 +376,7 @@ const ContentPage = ({ burgermenu }) => {
                 </div>
 
                 {commentBoxOpen[blog._id] && (
-                  <div className='flex flex-col gap-[5px] h-[300px] overflow-y-scroll flex  border rounded-lg '>
+                  <div className='flex flex-col gap-[5px] h-[300px] overflow-y-scroll   border rounded-lg '>
                     <p className='text-sm p-3'>Comments :</p>
                     <div className='flex flex-col'>
                     <div className="comment-section w-[100px]  sm:w-[200px]  text-sm md:w-[300px] flex  lg:w-[450px]   gap-[15px] items-start p-3">
@@ -348,13 +384,23 @@ const ContentPage = ({ burgermenu }) => {
                       <img src={sendicon} onClick={()=>{addComment(blog._id)}} className='w-[20px] h-[20px] hover:cursor-pointer' />
                     </div>
 
-                    {blogComments[blog._id] && blogComments[blog._id].map((comment, commentIndex) => (
-                        <div key={commentIndex} className="comment flex gap-[5px]">
-                        <p className="text-black text-sm p-3">{comment.autherName || 'Unknown Author'}</p>
-                          <p className="text-slate-500 text-sm p-3">{comment.comment_body}</p>
+                    {blogComments[blog._id] && !commentloading ? 
+                    
+                    (
+                     
+                      blogComments[blog._id].map((comment, commentIndex) => (
+                        <div key={commentIndex} className="comment flex items-center gap-[5px]">
+                         <p className="text-black text-sm p-3">{comment.autherName ? comment.autherName :'Unknown Author'}</p>
+                          <p className="text-slate-500 text-sm p-3">{comment.comment_body ?comment.comment_body :"this is body "}</p>
+                          <img src={deletecomment} className='w-[10px] h-[10px] hover:cursor-pointer ' onClick={deletecomment} />
                           
                         </div>
-                      ))}
+                      ))
+                    ):
+                      (
+                        <div>loading</div>
+                      )
+                      }
 
                       </div>
 
