@@ -10,16 +10,175 @@ import sessionlogintimer from '../images/../images/5228679.jpg'
 import Footer from '../components/Footer';
 import ContentPage from '../components/ContentPage';
 import menu from '../images/burger-menu.png'
+import filtericon from '../images/icons8-filter-64.png'
 
 const Home = () => {
   
   const [dark,setDark]=useState(false);
   const [isLoggedIn,setLogin]=useState(false);
   const [burgermenu,setmenu]=useState(true);
+  const [isloading,setloading]=useState(false);
+  const [openfilterbox,setfilterbox]=useState(false);
+  const [searchbytag,setsearchbytag]=useState(false);
+  const [searchbycategory,setsearchbycategory]=useState(false);
+  const [searchbyauther,setsearchbyauther]=useState(false);
+  const [blogs, setBlogs] = useState([]);
+
+  const [tagsInput, setTagsInput] = useState({
+    tags:""
+  });
+
+  const [categoryInput,setcategoryinput]=useState({
+    category:""
+  });
+
+  const [authername,setauthername]=useState({
+    authername:""
+  })
+
+
+  const changetagsinputhandler = (event) => {
+    
+    const { name, value } = event.target;
+    setTagsInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    console.log(tagsInput);
+  };
+
+  const changecategoryinputhandler = (event) => {
+    
+    const { name, value } = event.target;
+    setcategoryinput((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    console.log(categoryInput);
+  };
+
+
+  const changeautherinputhandler = (event) => {
+    
+    const { name, value } = event.target;
+    setauthername((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    console.log(authername);
+  };
+
+
  
 const setsidebar= ()=>{
   setmenu(!burgermenu);
 }
+
+const searchByTags = async () => {
+  try {
+    const tags =tagsInput.tags;
+   
+    const response = await axios.post(
+      'http://localhost:4000/api/v1/search',
+      { tags:tags }
+    );
+
+    if (response.data.success) {
+     
+      console.log('Blogs fetched by tags:', response.data.blogs);
+
+
+      setBlogs(response.data.blogs);
+
+      console.log("this is the updated blog , ",blogs);
+    } else {
+      // Handle the error case
+      console.error('Error fetching blogs by tags:', response.data.message);
+    }
+  } catch (error) {
+    console.error('Error fetching blogs by tags:', error);
+  }
+};
+
+const searchbycategoryfunction = async () => {
+  try {
+    const category =categoryInput.category;
+   
+    const response = await axios.post(
+      'http://localhost:4000/api/v1/searchbycategory',
+      { category:category }
+    );
+    
+    if (response.data.success) {
+     
+      console.log('Blogs fetched by tags:', response.data.blogs);
+
+
+      setBlogs(response.data.blogs);
+
+      console.log("this is the updated blog , ",blogs);
+    } else {
+      // Handle the error case
+      console.error('Error fetching blogs by category:', response.data.message);
+    }
+  } catch (error) {
+    console.error('Error fetching blogs by category:', error);
+  }
+};
+
+const searchbycAutherfunction = async () => {
+  try {
+    const autherName =authername.authername;
+   
+    const response = await axios.post(
+      'http://localhost:4000/api/v1/fetchbyauthername',
+      { auther:autherName }
+    );
+    
+    if (response.data.success) {
+     
+      console.log('Blogs fetched by auther name:', response.data.blogs);
+
+
+      setBlogs(response.data.blogs);
+
+      console.log("this is the updated blog , ",blogs);
+    } else {
+      // Handle the error case
+      console.error('Error fetching blogs by authername:', response.data.message);
+    }
+  } catch (error) {
+    console.error('Error fetching blogs by authername:', error);
+  }
+};
+
+
+const fetchallblogs = async () => {
+  try {
+    
+   
+    const response = await axios.get(
+      'https://blog-server-gbxk.onrender.com/api/v1/fetchallblogs',
+     
+    );
+    
+    if (response.data.success) {
+     
+      console.log('All blogs are fetched:', response.data.blogs);
+
+
+      setBlogs(response.data.blogs);
+
+      console.log("this is the updated blog , ",blogs);
+    } else {
+      // Handle the error case
+      console.error('Error fetching all blogs :', response.data.message);
+    }
+  } catch (error) {
+    console.error('Error fetching all blogs :', error);
+  }
+};
+
 
   useEffect(()=> {
      
@@ -34,7 +193,7 @@ const setsidebar= ()=>{
       
       try {
         
-        const response = await axios.get('https://blog-server-gbxk.onrender.com/api/v1/auth', { headers });
+        const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
         // console.log("this is login response : ",response);
          
         if (response.data.success) {
@@ -71,10 +230,111 @@ const setsidebar= ()=>{
    
     <div >
     {isLoggedIn?
-    <div className='flex flex-col overflow-y-hidden gap-[30px]  w-screen'>
+    <div className='flex relative  flex-col overflow-y-hidden gap-[30px]  w-screen'>
+    
+     {searchbytag && !searchbyauther && !searchbycategory && (
+
+      <div className='absolute top-[200px] right-[50vw]  w-[500px] h-[30px] flex gap-[5px]'> 
+        <div className='hover:cursor-pointer' onClick={()=>{setsearchbytag(!searchbytag)}}>X</div>
+        <input type="text" onChange={changetagsinputhandler} name="tags" className='border'/>
+        <button onClick={searchByTags}>Search by tags</button>
+
+      </div>
+     ) 
+
+     }
+
+     {!searchbytag && !searchbyauther && searchbycategory && (
+
+<div className='absolute top-[200px] right-[50vw]  w-[500px] h-[30px] flex gap-[5px]'> 
+  <div className='hover:cursor-pointer' onClick={()=>{setsearchbycategory(!searchbycategory)}}>X</div>
+  <input type="text" onChange={changecategoryinputhandler} placeholder='enter any one category' name="category" className='border'/>
+  <button onClick={searchbycategoryfunction}>Search by category</button>
+
+</div>
+) 
+
+}
+
+{!searchbytag && searchbyauther && !searchbycategory && (
+
+<div className='absolute top-[200px] right-[50vw]  w-[500px] h-[30px] flex gap-[5px]'> 
+  <div className='hover:cursor-pointer' onClick={()=>{setsearchbyauther(!searchbyauther)}}>X</div>
+  <input type="text" onChange={changeautherinputhandler} name="authername" className='border'/>
+  <button onClick={searchbycAutherfunction}>Search by auther</button>
+
+</div>
+) 
+
+}
+
+
+
+
     <div><Heading dark={dark} setDark={setDark} isLoggedIn={isLoggedIn} setLogin={setLogin} /></div>
-     
-     <div className='flex relative justify-evenly overflow-x-hidden  w-screen h-screen overflow-y-scroll '>
+     <div className='filterbox relative'>
+      <img src={filtericon} onClick={()=>{setfilterbox(!openfilterbox)}} className='w-auto absolute h-auto right-[5px] hover:cursor-pointer '/>
+      {
+        openfilterbox && (
+          <div className='flex flex-col absolute gap-[10px] justify-center items-center right-[5px] border w-[200px] h-[200px] bg-white p-4'> 
+         <div className='absolute right-[8px] top-[2px] hover:cursor-pointer' onClick={()=>{
+          setfilterbox(!openfilterbox)
+           
+          if(searchbycategory){
+            setsearchbycategory(false);
+          } 
+          if(searchbyauther){
+            setsearchbyauther(false);
+          }
+          if(searchbytag){
+            setsearchbytag(false);
+          }
+
+         }}>X</div>
+         <div onClick={()=>{
+          setsearchbytag(!searchbytag)
+          if(searchbyauther){
+            setsearchbyauther(false);
+          }
+          if(searchbycategory){
+            setsearchbycategory(false);
+          }
+          }} className='hover:bg-slate-300 hover:cursor-pointer hover:translate-x-2 rounded-lg p-2 duration-150'>tags</div>
+
+         <div className='hover:bg-slate-300 hover:cursor-pointer hover:translate-x-2 rounded-lg p-2 duration-150' onClick={()=>{
+          setsearchbycategory(!searchbycategory);
+
+
+          if(searchbyauther){
+            setsearchbyauther(false);
+          }
+          if(searchbytag){
+            setsearchbytag(false);
+          }
+         
+         
+         }}>category</div>
+
+         <div className='hover:bg-slate-300 hover:cursor-pointer hover:translate-x-2 rounded-lg p-2 duration-150' onClick={()=>{
+          
+          setsearchbyauther(!searchbyauther)
+          
+          if(searchbytag){
+            setsearchbytag(false);
+          }
+
+          if(searchbycategory){
+            setsearchbycategory(false);
+          }
+          
+          }}>auther</div>
+
+          <div className='hover:bg-slate-300 hover:cursor-pointer hover:translate-x-2 rounded-lg p-2 duration-150' onClick={fetchallblogs}> All</div>
+      </div>
+        )
+      }
+     </div>
+     <div className='flex  justify-evenly overflow-x-hidden  w-screen h-screen overflow-y-scroll '>
        
 
        
@@ -83,7 +343,7 @@ const setsidebar= ()=>{
         burgermenu ? <img src={menu} onClick={setsidebar} className='   hover:cursor-pointer w-[50px] h-[50px] absolute left-[20px]'  />:<LeftSidebar setmenu={setmenu} /> 
        }
       
-      <ContentPage burgermenu={burgermenu}/>
+      <ContentPage burgermenu={burgermenu} blogs={blogs} setBlogs={setBlogs}/>
        
 
     

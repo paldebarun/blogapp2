@@ -3,20 +3,38 @@ import React from 'react'
 import  LoginForm  from '../components/LoginForm';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
-import sun from '../images/icons8-light-on-48.png'
-import moon from '../images/icons8-reflector-bulb-48.png'
-import home from '../images/icons8-home-48.png'
-import logo from '../images/CU blogs-logos_black.png'
-import Footer from '../components/Footer';
-import Spinner from '../components/Spinner';
+import image1 from '../images/pexels-antoni-shkraba-4348078.jpg'
+import image2 from '../images/pexels-pixabay-159618.jpg'
+import image3 from '../images/pexels-tirachard-kumtanom-733856.jpg'
+import logo from '../images/CUBlogs.png'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
  const LoginPage = () => {
 
   const [dark,setDark]=useState(false);
-  const [isLoading,setLoading]=useState(false);
+  const [isLoading,setLoading]=useState(true);
+
+  useState(()=>{
+    const startfunction=()=>{
+
+       setTimeout(() => {
+        setLoading(false);
+       }, 1000);
+     
+
+    }
+
+    startfunction();
+  },[])
   
-  
+  useState(()=>{
+
+    if(isLoading){
+    toast("loading please wait ...");}
+    
+  },[isLoading])
 
   const brightness = () => {
     setDark(false);
@@ -27,62 +45,78 @@ import Spinner from '../components/Spinner';
   }
   
   return (
-   <div>
-{isLoading ? <div className='bg-white h-screen w-screen flex justify-center items-center'>
-
-<Spinner />
-
+   <div className='p-4'>
+{isLoading ? 
+<div>
+<ToastContainer 
+    position="top-center"
+autoClose={4985}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="colored"/> 
+</div>
  
 
-</div>:
- <div className='flex flex-col gap-[50px]'>
+:
 
-<div className='heading h-[100px] w-full flex justify-between  md:h-[120px] relative bg-gradient-to-r from-cyan-500 to-blue-500 px-4  items-center shadow-lg'>
-{
- dark ? (
-   <div className='flex justify-between w-full'>
-     <NavLink to='/home' ><img className='  hover:cursor-pointer w-[24px] h-[24px] sm:w-[50px] sm:h-[50px] hover:scale-110 duration-150' src={home} /></NavLink>
 
-     
-     <img src={sun} className=" w-[24px] h-[24px] sm:w-[50px] sm:h-[50px]  hover:cursor-pointer hover:scale-110 duration-150" onClick={brightness} />
-     
-     
-     
-     
-     </div>
-
- ) : (
-   <div className='flex justify-between w-full'>
-     <NavLink to='/home' ><img className=' hover:cursor-pointer w-[24px] h-[24px] sm:w-[50px] sm:h-[50px] hover:scale-110 duration-150' src={home} /></NavLink>
-
-    
-     <img src={moon} className=" w-[24px] h-[24px] sm:w-[50px] sm:h-[50px]  hover:cursor-pointer hover:scale-110 duration-150" onClick={darkness} />
-     
-    
-     
-     </div>
- )
-
-}
-   </div>
+ <div className='flex flex-col  lg:w-[500px]  m-auto gap-[50px] '>
  
  <div className='flex flex-col items-center'>
  <div className='w-'>
- <NavLink to='/home'> <img src={logo} className='animate-spin  w-[200px] h-auto hover:shadow-xl rounded-full' /> </NavLink>
+  <img src={logo} className='  w-[200px] h-auto ' />
  </div>
  
 
-<div className='w-full'>
-<h1 className='text-center font-bold text-3xl text-slate-400'>Login to CU Blogs</h1>
-<LoginForm setLoading={setLoading} dark={dark}/>
- <p className={dark?'text-center text-white ':'text-center text-black'}>If not registered ! 
- <NavLink to='/signup' className='text-blue-600 '> SignUp</NavLink></p>
+<div className='w-auto   p-[50px] flex  gap-[30px]    justify-center items-center shadow-2xl'>
+
+<div className='w-[500px] h-auto hidden lg:flex flex-col gap-[10px] '>
+ <div className='w-full h-auto pl-[100px] flex '>
+  <img src={image1}  className='w-[150px] shadow-2xl shadow-slate-700 h-[150px] rounded-3xl  '/>
+ </div>
+
+ <div className='w-full h-auto flex justify-end pr-[20px]'>
+  <img src={image2} className='w-[150px] shadow-2xl shadow-slate-700 h-[150px] rounded-3xl  ' />
+ </div>
+
+ <div className='w-full h-auto flex justify-center pr-[50px] '>
+  <img src={image3} className='w-[150px] shadow-2xl shadow-slate-700  h-[150px] rounded-3xl ' />
+ </div>
+
+
+
+
 </div>
 
 
+
+<div className='w-full '>
+
+<LoginForm setLoading={setLoading} dark={dark}/>
+
+  <div className=' w-[200px] sm:w-[350px] m-auto    bg-slate-200 p-3 rounded-xl'>
+
+  <p className='text-center text-xs sm:text-sm text-black font-mono'>Don't have an account ! 
+ <NavLink to='/signup' className='text-blue-600 font-mono '> SignUp</NavLink></p>
+
+  </div>
+
+ 
+
+</div>
+
+</div>
+
+<div className='w-full h-[100px]'></div>
+
  </div>
 
-<Footer />
+
 </div>
 
 

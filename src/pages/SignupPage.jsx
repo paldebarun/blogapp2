@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Heading from '../components/Heading';
 import Signupform from '../components/Signupform';
 import Footer from '../components/Footer';
-import logo from '../images/CU blogs-logos_black.png'
+import logo from '../images/CUBlogs.png'
 import { NavLink } from 'react-router-dom';
 
 const SignupPage = () => {

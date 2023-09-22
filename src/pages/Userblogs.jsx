@@ -11,12 +11,71 @@ import blogicon from '../images/blog.png'
 import deleteicon from '../images/icons8-delete-64.png'
 import nodatafoundimage from '../images/9214777.jpg'
 import loading from '../images/loading.png'
+import like from '../images/heart.png';
+import comment_icon from '../images/icons8-comment-48.png'
 
  const Userblogs = () => {
   const [dark, setDark] = useState(false);
 const [blogs,setblogs]=useState([]);
 const [isLoggedin,setLogin]=useState(false);
 const [isloading,setLoading]=useState(false);
+const [likescount,setlikecount]=useState({});
+const [commentloading, setcommentloading] = useState(false);
+const [commentBoxOpen, setCommentBoxOpen] = useState({});
+const [blogComments, setBlogComments] = useState({});
+
+
+
+// Define a function to fetch like counts for a single blog
+const fetchLikeCount = async (blogId) => {
+  try {
+    const response = await axios.post('http://localhost:4000/api/v1/fetchlikesauthernames', { blog_id: blogId });
+    if (response.data.success) {
+      return response.data.authorNames.length; 
+    }
+    return 0; 
+  } catch (error) {
+    console.error(error);
+    return 0; 
+  }
+};
+
+
+
+// Inside your useEffect, fetch like counts for each blog and update the state
+useEffect(() => {
+  const fetchData = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      setLoading(true);
+      const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
+      if (response.data.success) {
+        const payload = response.data.payload;
+        const url = `http://localhost:4000/api/v1/userblogs/${payload.email}`;
+        const response_second = await axios.get(url);
+        setblogs(response_second.data.blogs);
+        
+        // Fetch and update like counts for each blog
+        const likeCountsData = {};
+        for (const blog of response_second.data.blogs) {
+          const likeCount = await fetchLikeCount(blog._id);
+          likeCountsData[blog._id] = likeCount;
+        }
+        setlikecount(likeCountsData);
+        
+        console.log("this is likecount", likeCountsData);
+      }
+      setLoading(false);
+    }
+  };
+  fetchData();
+}, []);
+
+
+
 
 const deleteBlog = async (_id) => {
 
@@ -26,7 +85,7 @@ const deleteBlog = async (_id) => {
       id:_id
     }
     setLoading(true);
-    const response = await axios.post(`https://blog-server-gbxk.onrender.com/api/v1/deleteBlog`,obj);
+    const response = await axios.post(`http://localhost:4000/api/v1/deleteBlog`,obj);
     setLoading(false);
     console.log("delete response: ", response);
     window.location.reload();
@@ -50,7 +109,7 @@ useEffect(() => {
         Authorization: `Bearer ${token}`,
       };
      setLoading(true);
-      const response = await axios.get('https://blog-server-gbxk.onrender.com/api/v1/auth', { headers });
+      const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
      console.log("response : ",response);
       if(response.data.success){
         console.log("this is it");
@@ -62,7 +121,7 @@ useEffect(() => {
       const payload = response.data.payload;
       console.log("payload : ",payload);
       
-      const url = `https://blog-server-gbxk.onrender.com/api/v1/userblogs/${payload.email}`;
+      const url = `http://localhost:4000/api/v1/userblogs/${payload.email}`;
       const response_second = await axios.get(url);
      
 
@@ -83,6 +142,35 @@ useEffect(() => {
 
   
 }, []);
+
+const commentsectionhandler = async (blogId) => {
+
+  try {
+
+    if (!blogComments[blogId]) {
+      setcommentloading(true);
+      const response = await axios.post(`http://localhost:4000/api/v1/fetchcomments`, { blog_id: blogId });
+      console.log(response);
+      if (response.data.success) {
+        setBlogComments((prevComments) => ({
+          ...prevComments,
+          [blogId]: response.data.comments,
+        }));
+      }
+
+      setcommentloading(false);
+    }
+
+    setCommentBoxOpen((prevState) => ({
+      ...prevState,
+      [blogId]: !prevState[blogId],
+    }));
+
+    console.log(blogComments);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const brightness = () => {
   setDark(false);
@@ -122,8 +210,8 @@ const darkness = () => {
               
               </div>
               <div className='flex w-full flex-col gap-[10px] sm:flex-row  '>
-                <div className='text-red-700 font-mono text-sm sm:text-md'> Content - </div>
-                <textarea className='border lg:w-[1200px] sm:w-[700px] text-center h-[200px] rounded-lg text-sm sm:text-md text-slate-500'>{blog.content}</textarea>
+                <div className='text-red-700 font-mono text-sm sm:text-md'> Content </div>
+                <div className='border lg:w-[1200px] sm:w-[700px] overflow-y-scroll p-4 text-center h-[200px] rounded-lg text-sm sm:text-md text-slate-500'>{blog.content}</div>
               </div>
               <div className='flex flex-col md:flex-row gap-[10px]'>
               <div className='text-red-700 text-xs sm:text-md'>Category : </div>
@@ -136,8 +224,53 @@ const darkness = () => {
               <div className='text-red-700 text-sm sm:text-md'>Date : </div>
 
               <div className='text-slate-500 text-sm sm:text-md'> {new Date(blog.date).toLocaleDateString()}</div>
-
+             
+               
               </div>
+
+              <div className='flex gap-[10px] items-center justify-center'>
+                <img src={like}/>
+                <div className='likecount text-sm'>{likescount[blog._id]}</div>
+                <div>
+                  
+                </div>
+               </div>
+
+               <div>
+                  <img
+                    src={comment_icon}
+                    className="hover:cursor-pointer w-[20px] h-[20px]"
+                    onClick={() => commentsectionhandler(blog._id)}
+                  />
+                </div>
+
+                {commentBoxOpen[blog._id] && (
+                  <div className='flex flex-col gap-[5px] h-[300px] overflow-y-scroll   border rounded-lg '>
+                    <p className='text-sm p-3'>Comments :</p>
+                    <div className='flex flex-col'>
+                     
+                      {blogComments[blog._id] && !commentloading ? (
+                        blogComments[blog._id].map((comment, commentIndex) => (
+                          <div key={commentIndex} className="comment flex items-center gap-[5px]">
+                            <p className="text-black text-sm p-3">{comment.autherName ? comment.autherName : 'Unknown Author'}</p>
+                            <p className="text-slate-500 text-sm p-3">{comment.comment_body ? comment.comment_body : "this is body "}</p>
+                             
+                              
+                            
+                          </div>
+                        ))
+                      ) : (
+                        <div className='w-full h-full flex justify-center items-center'>
+                          
+                          <div className='text-sm'> loading ...</div>
+
+                        </div>
+                      )}
+
+                    </div>
+
+                  </div>
+                )}
 
               <div className="tags  flex-wrap  sm:w-[200px] wrap flex-row gap-[2px]  ">
                 {blog.tags.map((tag, index) => (
