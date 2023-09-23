@@ -108,7 +108,7 @@ import note from '../images/icons8-note-64.png'
         <img  src={note} className='w-[30px] h-[30px]'/>
 
         <textarea type="text" placeholder="content of the blog" onChange={changeHandler}
-          className='text-center p-2 border rounded-lg md:w-[500px]' name="content" value={formdata.content} ></textarea>
+          className='text-center p-2 border h-[200px] rounded-lg md:w-[500px]' name="content" value={formdata.content} ></textarea>
 
       </div>
 
