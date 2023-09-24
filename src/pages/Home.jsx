@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import Heading from '../components/Heading';
-import LeftSidebar from '../components/LeftSidebar'
+import {BsFilterRight} from 'react-icons/bs'
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import sun from '../images/icons8-light-on-48.png'
 import moon from '../images/icons8-reflector-bulb-48.png'
-import home from '../images/icons8-home-48.png'
+import home from '../images/icons8-homepage-48.png'
 import sessionlogintimer from '../images/../images/5228679.jpg'
 import Footer from '../components/Footer';
 import ContentPage from '../components/ContentPage';
-import menu from '../images/burger-menu.png'
-import filtericon from '../images/icons8-filter-64.png'
+import {CiSearch} from 'react-icons/ci'
+import {GrFormClose} from 'react-icons/gr'
+
 
 const Home = () => {
   
@@ -231,25 +232,34 @@ const fetchallblogs = async () => {
     <div >
     {isLoggedIn?
     <div className='flex relative  flex-col overflow-y-hidden gap-[30px]  w-screen'>
-    
-     {searchbytag && !searchbyauther && !searchbycategory && (
 
-      <div className='absolute top-[200px] right-[50vw]  w-[500px] h-[30px] flex gap-[5px]'> 
-        <div className='hover:cursor-pointer' onClick={()=>{setsearchbytag(!searchbytag)}}>X</div>
-        <input type="text" onChange={changetagsinputhandler} name="tags" className='border'/>
-        <button onClick={searchByTags}>Search by tags</button>
+    <div><Heading  dark={dark} setDark={setDark} isLoggedIn={isLoggedIn} setLogin={setLogin} /></div>
 
-      </div>
-     ) 
+    <div className='absolute  top-[24px] sm:top-[35px] md:relative p-2   sm:px-[10px] items-center  h-auto flex sm:justify-center w-full '>
 
-     }
 
-     {!searchbytag && !searchbyauther && searchbycategory && (
+    {searchbytag && !searchbyauther && !searchbycategory && (
 
-<div className='absolute top-[200px] right-[50vw]  w-[500px] h-[30px] flex gap-[5px]'> 
-  <div className='hover:cursor-pointer' onClick={()=>{setsearchbycategory(!searchbycategory)}}>X</div>
-  <input type="text" onChange={changecategoryinputhandler} placeholder='enter any one category' name="category" className='border'/>
-  <button onClick={searchbycategoryfunction}>Search by category</button>
+<div className=' items-center justify-start sm:justify-center md:bg-white  sm:scale-100  w-full h-auto  flex gap-[5px]'> 
+  
+  <input type="text" placeholder='enter tags' onChange={changetagsinputhandler} name="tags" className="outline-none w-[120px] text-sm sm:text-base sm:w-[200px] border-b-2 px-1 sm:px-3"/>
+   <CiSearch className='hover:cursor-pointer' onClick={searchByTags}/>
+   <GrFormClose className='hover:cursor-pointer' onClick={()=>{setsearchbytag(!searchbytag)}}/>
+
+</div>
+) 
+
+}
+
+{!searchbytag && !searchbyauther && searchbycategory && (
+
+<div className='items-center justify-start sm:justify-center sm:scale-100  w-full h-auto md:bg-white flex gap-[5px]'> 
+
+<input type="text" onChange={changecategoryinputhandler} placeholder='enter category' name="category" className='outline-none w-[120px] text-sm sm:text-base sm:w-[200px] border-b-2 px-1 sm:px-3'/>
+
+<CiSearch className='hover:cursor-pointer' onClick={searchbycategoryfunction}/>
+
+<GrFormClose className='hover:cursor-pointer' onClick={()=>{setsearchbycategory(!searchbycategory)}}/>
 
 </div>
 ) 
@@ -258,26 +268,22 @@ const fetchallblogs = async () => {
 
 {!searchbytag && searchbyauther && !searchbycategory && (
 
-<div className='absolute top-[200px] right-[50vw]  w-[500px] h-[30px] flex gap-[5px]'> 
-  <div className='hover:cursor-pointer' onClick={()=>{setsearchbyauther(!searchbyauther)}}>X</div>
-  <input type="text" onChange={changeautherinputhandler} name="authername" className='border'/>
-  <button onClick={searchbycAutherfunction}>Search by auther</button>
+<div className=' items-center justify-start sm:justify-center   sm:scale-100  w-full h-auto md:bg-white flex gap-[5px]'> 
+
+<input type="text" onChange={changeautherinputhandler} name="authername" placeholder='enter authername' className='outline-none w-[120px] text-xs sm:text-base sm:w-[200px] border-b-2 px-1 sm:px-3'/>
+<CiSearch onClick={searchbycAutherfunction}/>
+<GrFormClose className='hover:cursor-pointer' onClick={()=>{setsearchbyauther(!searchbyauther)}}/>
 
 </div>
 ) 
 
 }
 
-
-
-
-    <div><Heading dark={dark} setDark={setDark} isLoggedIn={isLoggedIn} setLogin={setLogin} /></div>
-     <div className='filterbox relative'>
-      <img src={filtericon} onClick={()=>{setfilterbox(!openfilterbox)}} className='w-auto absolute h-auto right-[5px] hover:cursor-pointer '/>
+<BsFilterRight onClick={()=>{setfilterbox(!openfilterbox)}} className='w-[24px] h-[24px] sm:w-[35px] sm:h-[35px] absolute right-[5px] hover:cursor-pointer '/>
       {
         openfilterbox && (
-          <div className='flex flex-col absolute gap-[10px] justify-center items-center right-[5px] border w-[200px] h-[200px] bg-white p-4'> 
-         <div className='absolute right-[8px] top-[2px] hover:cursor-pointer' onClick={()=>{
+          <div className='flex w-[120px] rounded-xl top-[-3px]  bg-white z-20 flex-col absolute gap-[10px] justify-center items-center sm:right-[5px] shadow-xl right-[2px] border sm:w-[190px] h-[200px]  p-5'> 
+         <GrFormClose className='absolute right-[10px] top-[3px] hover:cursor-pointer' onClick={()=>{
           setfilterbox(!openfilterbox)
            
           if(searchbycategory){
@@ -290,7 +296,7 @@ const fetchallblogs = async () => {
             setsearchbytag(false);
           }
 
-         }}>X</div>
+         }}/>
          <div onClick={()=>{
           setsearchbytag(!searchbytag)
           if(searchbyauther){
@@ -329,21 +335,40 @@ const fetchallblogs = async () => {
           
           }}>auther</div>
 
-          <div className='hover:bg-slate-300 hover:cursor-pointer hover:translate-x-2 rounded-lg p-2 duration-150' onClick={fetchallblogs}> All</div>
+          <div className='hover:bg-slate-300 hover:cursor-pointer hover:translate-x-2 rounded-lg p-2 duration-150' onClick={()=>{
+            fetchallblogs();
+            if(searchbytag){
+            setsearchbytag(false);
+          }
+
+          if(searchbycategory){
+            setsearchbycategory(false);
+          }
+
+          if(searchbyauther){
+            setsearchbyauther(false);
+          }
+
+
+
+          }}> All</div>
       </div>
         )
       }
+
+
+
+    </div>
+    
+
+    
+     <div className='filterbox '>
+      
      </div>
      <div className='flex  justify-evenly overflow-x-hidden  w-screen h-screen overflow-y-scroll '>
        
-
-       
-
-       {
-        burgermenu ? <img src={menu} onClick={setsidebar} className='   hover:cursor-pointer w-[50px] h-[50px] absolute left-[20px]'  />:<LeftSidebar setmenu={setmenu} /> 
-       }
       
-      <ContentPage burgermenu={burgermenu} blogs={blogs} setBlogs={setBlogs}/>
+      <ContentPage  blogs={blogs} setBlogs={setBlogs}/>
        
 
     

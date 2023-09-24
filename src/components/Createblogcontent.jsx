@@ -7,7 +7,7 @@ import sessionlogintimer from '../images/../images/5228679.jpg'
 import { NavLink } from 'react-router-dom';
 import sun from '../images/icons8-light-on-48.png'
 import moon from '../images/icons8-reflector-bulb-48.png'
-import home from '../images/icons8-home-48.png'
+import home from '../images/icons8-homepage-48.png'
 import note from '../images/icons8-note-64.png'
 
  const Createblogcontent = ({payload,isLoggedIn,setlogin}) => {
