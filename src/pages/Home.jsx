@@ -240,7 +240,7 @@ const fetchallblogs = async () => {
 
     {searchbytag && !searchbyauther && !searchbycategory && (
 
-<div className=' items-center justify-start sm:justify-center md:bg-white  sm:scale-100  w-full h-auto  flex gap-[5px]'> 
+<div className=' absolute top-[45px] items-center justify-start sm:justify-center md:bg-white  sm:scale-100  w-full h-auto  flex gap-[5px]'> 
   
   <input type="text" placeholder='enter tags' onChange={changetagsinputhandler} name="tags" className="outline-none w-[120px] text-sm sm:text-base sm:w-[200px] border-b-2 px-1 sm:px-3"/>
    <CiSearch className='hover:cursor-pointer' onClick={searchByTags}/>
@@ -253,7 +253,7 @@ const fetchallblogs = async () => {
 
 {!searchbytag && !searchbyauther && searchbycategory && (
 
-<div className='items-center justify-start sm:justify-center sm:scale-100  w-full h-auto md:bg-white flex gap-[5px]'> 
+<div className='absolute top-[45px] items-center justify-start sm:justify-center sm:scale-100  w-full h-auto md:bg-white flex gap-[5px]'> 
 
 <input type="text" onChange={changecategoryinputhandler} placeholder='enter category' name="category" className='outline-none w-[120px] text-sm sm:text-base sm:w-[200px] border-b-2 px-1 sm:px-3'/>
 
@@ -268,7 +268,7 @@ const fetchallblogs = async () => {
 
 {!searchbytag && searchbyauther && !searchbycategory && (
 
-<div className=' items-center justify-start sm:justify-center   sm:scale-100  w-full h-auto md:bg-white flex gap-[5px]'> 
+<div className=' absolute top-[45px] items-center justify-start sm:justify-center   sm:scale-100  w-full h-auto md:bg-white flex gap-[5px]'> 
 
 <input type="text" onChange={changeautherinputhandler} name="authername" placeholder='enter authername' className='outline-none w-[120px] text-xs sm:text-base sm:w-[200px] border-b-2 px-1 sm:px-3'/>
 <CiSearch onClick={searchbycAutherfunction}/>
