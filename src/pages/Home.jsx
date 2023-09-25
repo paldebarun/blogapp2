@@ -376,7 +376,7 @@ const fetchallblogs = async () => {
      </div>
 
   
-    <Footer />
+    {/* <Footer /> */}
   
   </div>
   :
@@ -431,7 +431,7 @@ const fetchallblogs = async () => {
          
        </div>
 
-       <Footer />
+       {/* <Footer /> */}
     </div>}
   </div>
   )

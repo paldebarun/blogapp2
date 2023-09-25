@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import nodatafoundimage from '../images/9214777.jpg';
-// import loading from '../images/loading.png';
-
-import comment_icon from '../images/icons8-comment-48.png'
-import sendicon from '../images/icons8-send-16.png'
-import deletecommenticon from '../images/icons8-delete-64.png'
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { AiOutlineSend } from 'react-icons/ai'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {GrFormClose} from 'react-icons/gr'
-import {FcLike} from 'react-icons/fc'
-import {FcLikePlaceholder} from 'react-icons/fc'
-import {FaRegComment} from 'react-icons/fa'
+import { GrFormClose, GrSend } from 'react-icons/gr'
+import { FcLike } from 'react-icons/fc'
+import { FcLikePlaceholder } from 'react-icons/fc'
+import { FaRegComment } from 'react-icons/fa'
+import {AiOutlineDelete} from 'react-icons/ai'
+import {BsDot} from 'react-icons/bs'
+import {CgSpinner} from 'react-icons/cg'
 
 
-const ContentPage = ({ blogs,setBlogs }) => {
+const ContentPage = ({ blogs, setBlogs }) => {
   const [dark, setDark] = useState(false);
-  // const [blogs, setBlogs] = useState([]);
   const [isloading, setLoading] = useState(false);
   const [commentloading, setcommentloading] = useState(false);
   const [payload, setPayload] = useState({});
@@ -30,7 +29,7 @@ const ContentPage = ({ blogs,setBlogs }) => {
 
     comment: ""
   });
-
+  const [likeconatinerloader, setlikeloader] = useState(false);
 
   useEffect(() => {
     const initialCommentBoxOpen = {};
@@ -244,9 +243,10 @@ const ContentPage = ({ blogs,setBlogs }) => {
   }
 
 
-  const likecontainerhandler = async (blogId) => {
+  const reloadlikecontainer = async (blogId) => {
+
     try {
-      setLoading(true);
+      setlikeloader(true);
       const response = await axios.post(`http://localhost:4000/api/v1/fetchlikesauthernames`, { blog_id: blogId });
 
       console.log(response);
@@ -254,22 +254,56 @@ const ContentPage = ({ blogs,setBlogs }) => {
         setLikedAuthors(response.data.authorNames);
         setSelectedBlogId(blogId);
 
-        // Toggle the like container's visibility by inverting the current state
-        setLikeContainer((prevContainer) => !prevContainer);
+
+        setlikeloader(false);
       }
-      setLoading(false);
-    } catch (error) {
+      setlikeloader(false);
+    }
+    catch (error) {
+      setlikeloader(false);
+      console.error(error);
+    }
+
+
+  }
+
+
+  const likecontainerhandler = async (blogId) => {
+    try {
+      
+      setlikeloader(true);
+      const response = await axios.post(`http://localhost:4000/api/v1/fetchlikesauthernames`, { blog_id: blogId });
+
+      console.log("this is lik container response ", response);
+      if (response.data.success) {
+        setLikedAuthors(response.data.authorNames);
+        setSelectedBlogId(blogId);
+
+
+        setLikeContainer((prevContainer) => !prevContainer);
+
+        console.log("setlikecontainer", likecontainer);
+        setlikeloader(false);
+      }
+    }
+
+    
+      
+    catch (error) {
+      setlikeloader(false);
       console.error(error);
     }
   }
 
-  const likebutton = async (blogid, index) => { // Pass the index of the blog
+
+
+  const likebutton = async (blogid, index) => {
     try {
-      setLoading(true);
+
       console.log(payload.email);
       const user = await axios.post('http://localhost:4000/api/v1/fetchuser', { email: payload.email });
 
-      console.log(user);
+      console.log("this is user : ", user);
       console.log("user id : ", user.data.user._id);
       console.log("blog id : ", blogid);
       const existingLike = await axios.post(
@@ -282,17 +316,17 @@ const ContentPage = ({ blogs,setBlogs }) => {
 
       console.log("existing like", existingLike);
 
-      setLoading(false);
+
       console.log("isliked ", existingLike.data.liked);
 
       if (existingLike.data.liked) {
-        setLoading(true);
+        setlikeloader(true);
         const response = await axios.post('http://localhost:4000/api/v1/unlike', { id: user.data.user._id, blog_id: blogid });
 
         console.log("unlike response: ", response);
 
         if (response.data.success) {
-          // Update the corresponding islike state for the blog
+
           setIsLikeArray(prevState => {
             const newState = [...prevState];
             newState[index] = false;
@@ -300,11 +334,13 @@ const ContentPage = ({ blogs,setBlogs }) => {
           });
         }
 
-        setLoading(false);
 
-        window.location.reload();
+
+
+
+        reloadlikecontainer(blogid);
       } else {
-        setLoading(true);
+
         const response = await axios.post(
           `http://localhost:4000/api/v1/like`,
           { blog_id: blogid, id: user.data.user._id }
@@ -321,9 +357,9 @@ const ContentPage = ({ blogs,setBlogs }) => {
           });
         }
 
-        setLoading(false);
 
-        window.location.reload();
+
+        reloadlikecontainer(blogid);
       }
     } catch (error) {
       console.error(error);
@@ -352,119 +388,91 @@ const ContentPage = ({ blogs,setBlogs }) => {
             />
           </div>
         ) : (
-          <div className='flex flex-col w-full  gap-[10px]   md:gap-[20px]'>
-          
-           
+
+          <div className='flex flex-col w-full  gap-[70px]'>
+
+
             {blogs.map((blog, index) => (
-              <div className='p-2  sm:scale-90 lg:scale-100 shadow-xl border rounded-lg h-auto flex flex-col items-start gap-[20px]  relative  w-[90%] md:w-[60%] lg:w-[50%]  break-words mx-auto text-2xl' key={blog._id} >
-                
-                
-                
-                 
-                  <div className='text-md text-black font-extrabold text-lg sm:text-md'>{blog.auther}</div>
-               
-               <div className='w-full text-center '>
-               <h3 className='font-bold text-black text-center text-md'>{blog.heading}</h3>
-               </div>
-                
+
+              <div className='p-2  sm:scale-90 lg:scale-100   h-auto flex flex-col items-start gap-[20px]  relative  w-[90%] md:w-[60%] lg:w-[50%]  break-words mx-auto text-2xl' key={blog._id} >
+              <div className='flex  justify-center items-end  gap-[10px]'>
+                <div className='flex gap-[1px]'>
+                <div className='text-sm text-black font-extrabold  sm:text-md'>{blog.auther}</div>
+                <BsDot className='w-[20px] h-[20px] ' />
+                </div>
+                  <div className='text-slate-500 text-sm sm:text-md'>
+                    {formatDistanceToNow(parseISO(blog.date), { addSuffix: true })}
+                  </div>
+                </div>
+                <div className='w-full text-center '>
+                  <h3 className='font-semibold text-black text-center text-sm'>{blog.heading}</h3>
+                </div>
+
                 <div className='flex w-full flex-col gap-[10px] sm:flex-row  '>
-                 
-                  <div className=' overflow-y-scroll lg:w-[1200px] sm:w-[700px] text-center h-[200px] rounded-lg text-sm sm:text-md text-slate-500'>{blog.content}</div>
+
+                  <div className=' overflow-y-scroll lg:w-[1200px] sm:w-[700px] text-center h-[200px] rounded-lg text-sm sm:text-md text-slate-500 border p-2'>{blog.content}</div>
                 </div>
 
                 <div className='hover:cursor-pointer flex    gap-[10px] sm:gap-[15px]  items-center justify-between'>
-                  
-                    {islikeArray[index] ? <FcLike onClick={() => likebutton(blog._id, index)} className='w-[20px] h-[20px] ' /> : <FcLikePlaceholder onClick={() => likebutton(blog._id, index)} className='w-[20px] h-[20px] ' />} 
-                  
-                  
-                  
-                 <FaRegComment
+
+                  {islikeArray[index] ? <FcLike onClick={() => likebutton(blog._id, index)} className='w-[20px] h-[20px] ' /> : <FcLikePlaceholder onClick={() => likebutton(blog._id, index)} className='w-[20px] h-[20px] ' />}
+
+
+
+                  <FaRegComment
                     className="hover:cursor-pointer w-[18px] h-[18px]"
                     onClick={() => commentsectionhandler(blog._id)}
                   />
-                
+
 
 
                 </div>
 
                 <div className='flex flex-col gap-[10px]  items-start '>
 
-                    <p onClick={() => likecontainerhandler(blog._id)} className='hover:cursor-pointer text-black text-sm p-1'>See Likes</p>
-                    <div className='w-[400px] h-[400px] border top-52 left-[18%] absolute'>
-                       
-                      {likecontainer && selectedBlogId === blog._id && likedAuthors.length > 0 && (
-                        <div className="liked-authors  p-4">
-                        <GrFormClose onClick={() => likecontainerhandler(blog._id)} className='absolute right-2 w-[15px] top-1 h-[15px]' />
-                          <h3 className='text-sm'>Liked by:</h3>
-                          <div className='flex flex-col h-[100px] md:w-[200px] lg:w-[400px] overflow-y-scroll'>
-                            {likedAuthors.map((author, authorIndex) => (
-                              <div className='text-sm text-slate-400' key={authorIndex}>{author}</div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+                  <p onClick={() => likecontainerhandler(blog._id)} className='hover:cursor-pointer text-black text-sm p-1'>See Likes</p>
 
 
 
+                </div>
+
+                <div className='w-full h-auto '>
+
+
+
+                  {likecontainer && selectedBlogId === blog._id && (
+
+                    <div className="liked-authors relative h-[200px] w-full border rounded-lg  p-4">
+                      <GrFormClose onClick={() => likecontainerhandler(blog._id)} className='absolute hover:cursor-pointer right-2 w-[15px] top-1 h-[15px]' />
+                      <h3 className='text-sm'>Liked by:</h3>
+                      {!likeconatinerloader ? <div className='flex flex-col  h-auto md:w-[200px] lg:w-[400px] overflow-y-scroll'>
+                        {likedAuthors.length > 0 ? likedAuthors.map((author, authorIndex) => (
+                          <div className='text-sm text-slate-400' key={authorIndex}>{author}</div>
+                        )) : <div className='text-sm'>no likes</div>}
+
+                      </div> :
+                       <div className='w-full flex justify-center items-center h-full text-sm'>
+                          <CgSpinner className='animate-spin' />
+                      </div>}
 
                     </div>
+                  )
 
 
-                  </div>
+                  }
 
 
-                <div className='flex flex-col md:flex-row gap-[10px]'>
-                  <div className='text-red-700 text-xs sm:text-md'>Category : </div>
+
+
+
+                </div>
+
+
+                <div className='flex items-center justify-center   gap-[10px]'>
+                  <div className='text-black font-semibold text-sm sm:text-md'>Category : </div>
                   <div className='text-slate-500 text-sm sm:text-md'> {blog.category}</div>
                 </div>
-                <div className='flex flex-col md:flex-row gap-[10px]'>
-                  <div className='text-red-700 text-sm sm:text-md'>Date : </div>
-                  <div className='text-slate-500 text-sm sm:text-md'> {new Date(blog.date).toLocaleDateString()}</div>
-                </div>
-               
 
-
-
-
-
-
-                
-
-                {commentBoxOpen[blog._id] && (
-                  <div className='flex absolute top-[0px] bg-white w-full left-0 flex-col gap-[5px] h-full overflow-y-scroll p-4    border rounded-lg '>
-                    <GrFormClose  onClick={() => commentsectionhandler(blog._id)} />
-                    {/* <p className='text-sm p-3'>Comments :</p> */}
-                    <div className='flex flex-col'>
-                      <form onSubmit={(event) => { addComment(blog._id, event) }} className="comment-section w-[100px]  sm:w-[200px]  text-sm md:w-[300px] flex      lg:w-[450px]   gap-[15px] items-start p-3">
-                        <input type="text" name="comment" onChange={handleCommentChange} value={newComment.comment} className=' border-b-2 outline-none ' placeholder='add your comment here ' />
-                        <button type="submit" > <img src={sendicon} className='w-[20px] h-[20px] hover:cursor-pointer' /></button>
-                      </form>
-                      {blogComments[blog._id] && !commentloading ? (
-                        blogComments[blog._id].map((comment, commentIndex) => (
-                          <div key={commentIndex} className="comment flex items-center gap-[5px]">
-                            <p className="text-black text-sm p-3">{comment.autherName ? comment.autherName : 'Unknown Author'}</p>
-                            <p className="text-slate-500 text-sm p-3">{comment.comment_body ? comment.comment_body : "this is body "}</p>
-
-                            <img
-                              src={deletecommenticon}
-                              className='w-[20px] h-[20px] hover:cursor-pointer'
-                              onClick={() => deletecomment(blog._id, comment._id)}
-                            />
-
-                          </div>
-                        ))
-                      ) : (
-                        <div className='w-full h-full flex justify-center items-center'>
-
-                          <div className='text-sm'> loading ...</div>
-
-                        </div>
-                      )}
-
-                    </div>
-
-                  </div>
-                )}
 
                 <div className="tags  flex-wrap  sm:w-[200px] wrap flex-row gap-[2px]  ">
                   {blog.tags.map((tag, index) => (
@@ -476,8 +484,55 @@ const ContentPage = ({ blogs,setBlogs }) => {
                     </div>
                   ))}
                 </div>
+
+
+                <div className='bg-slate-500 w-full h-[1px]'></div>
+
+
+                <div className={commentBoxOpen[blog._id] ? 'flex absolute bottom-[0px] bg-white w-full left-0 flex-col gap-[5px] h-[70%] overflow-y-scroll p-4 transition-all duration-175    border rounded-lg ' : 'flex absolute bottom-[0px] bg-white w-full left-0 flex-col gap-[5px] h-0 overflow-y-scroll     border rounded-lg transition-all duration-175'}>
+                  <div className='w-full h-[20px] flex justify-center'>
+                    <div className='w-[50px] h-[5px] rounded-2xl bg-slate-400'></div>
+                  </div>
+                  <GrFormClose className='hover:cursor-pointer' onClick={() => commentsectionhandler(blog._id)} />
+
+                  <div className='flex flex-col'>
+                    <form onSubmit={(event) => { addComment(blog._id, event) }} className="comment-section w-[100px]  sm:w-[200px]  text-sm md:w-[300px] flex      lg:w-[450px]   gap-[15px] items-start p-3">
+                      <input type="text" name="comment" onChange={handleCommentChange} value={newComment.comment} className=' border-b-2 outline-none ' placeholder='add your comment here ' />
+                      <button type="submit" > <AiOutlineSend className='w-[20px] h-[20px] hover:cursor-pointer' /></button>
+                    </form>
+                    {blogComments[blog._id] && !commentloading ? (
+                      blogComments[blog._id].map((comment, commentIndex) => (
+                        <div key={commentIndex} className="comment flex items-center gap-[5px]">
+                          <p className="text-black text-sm p-3">{comment.autherName ? comment.autherName : 'Unknown Author'}</p>
+                          <p className="text-slate-500 text-sm p-3">{comment.comment_body ? comment.comment_body : "this is body "}</p>
+
+                          <AiOutlineDelete
+                            className='w-[20px] h-[20px] hover:cursor-pointer'
+                            onClick={() => deletecomment(blog._id, comment._id)}
+                          />
+
+                        </div>
+                      ))
+                    ) : (
+                      <div className='w-full h-full flex justify-center items-center'>
+
+                        <div className='text-sm'> loading ...</div>
+
+                      </div>
+                    )}
+
+                  </div>
+
+                </div>
+                {/* )} */}
               </div>
-            ))}
+
+            )
+
+            )
+
+            }
+
           </div>
         )
       ) : (
