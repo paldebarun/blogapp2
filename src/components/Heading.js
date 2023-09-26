@@ -11,9 +11,10 @@ import {IoIosLogOut} from 'react-icons/io'
 import {IoIosLogIn} from 'react-icons/io'
 import {BsPlusSquare} from 'react-icons/bs'
 import {BsPlusSquareFill} from 'react-icons/bs'
+import {AiOutlineCaretDown} from 'react-icons/ai'
 
 
- const Heading = ({setDark,setLogin,isLoggedIn}) => {
+ const Heading = ({imgurl,setDark,setLogin,isLoggedIn}) => {
   
   useEffect(()=>{
     const fetchdata=async ()=>{
@@ -65,8 +66,14 @@ import {BsPlusSquareFill} from 'react-icons/bs'
           <BsPlusSquare className='sm:w-[21px] sm:h-[21px] hover:cursor-pointer lg:w-[26px] lg:h-[26px] hover:scale-110 duration-150'/>
           </NavLink>
           
-          <NavLink to='/dashboard'  >
-          <CgProfile className='sm:w-[25px] sm:h-[25px] lg:w-[30px] lg:h-[30px] hover:scale-110 duration-150'/>
+          <NavLink to='/dashboard' className='flex group flex-col justify-center items-center' >
+          {imgurl ?
+            <img src={imgurl} className='sm:w-[25px] sm:h-[25px] rounded-full lg:w-[30px] lg:h-[30px] hover:scale-110 duration-150'/>
+            :
+          <CgProfile className='sm:w-[25px]  sm:h-[25px] lg:w-[30px] lg:h-[30px] hover:scale-110 duration-150'/>}
+
+          <AiOutlineCaretDown className='hidden group-hover:inline opacity-25 w-[20px] transition-all duration-200'  />
+          
           </NavLink>
 
           <div className='flex gap-[20px]'>

@@ -395,12 +395,12 @@ const ContentPage = ({ blogs, setBlogs }) => {
             {blogs.map((blog, index) => (
 
               <div className='p-2  sm:scale-90 lg:scale-100   h-auto flex flex-col items-start gap-[20px]  relative  w-[90%] md:w-[60%] lg:w-[50%]  break-words mx-auto text-2xl' key={blog._id} >
-              <div className='flex  justify-center items-end  gap-[10px]'>
-                <div className='flex gap-[1px]'>
-                <div className='text-sm text-black font-extrabold  sm:text-md'>{blog.auther}</div>
-                <BsDot className='w-[20px] h-[20px] ' />
+              <div className='flex sm:flex-row flex-col  justify-center items-end  gap-[10px]'>
+                <div className='flex text-xs items-center  sm:text-sm md:text-md gap-[3px]   sm:gap-[1px]'>
+                <div className=' text-black font-extrabold  '>{blog.auther}</div>
+                <BsDot className='w-[20px] h-[20px] text-sm ' />
                 </div>
-                  <div className='text-slate-500 text-sm sm:text-md'>
+                  <div className='text-slate-500 text-xs sm:text-sm md:text-md '>
                     {formatDistanceToNow(parseISO(blog.date), { addSuffix: true })}
                   </div>
                 </div>

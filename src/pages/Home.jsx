@@ -3,11 +3,7 @@ import Heading from '../components/Heading';
 import {BsFilterRight} from 'react-icons/bs'
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
-import sun from '../images/icons8-light-on-48.png'
-import moon from '../images/icons8-reflector-bulb-48.png'
-import home from '../images/icons8-homepage-48.png'
-import sessionlogintimer from '../images/../images/5228679.jpg'
-import Footer from '../components/Footer';
+import sessionlogintimer from '../images/blogexpitredimage.jpeg'
 import ContentPage from '../components/ContentPage';
 import {CiSearch} from 'react-icons/ci'
 import {GrFormClose} from 'react-icons/gr'
@@ -24,6 +20,7 @@ const Home = () => {
   const [searchbycategory,setsearchbycategory]=useState(false);
   const [searchbyauther,setsearchbyauther]=useState(false);
   const [blogs, setBlogs] = useState([]);
+  const [imgurl,setimgulr]=useState('');
 
   const [tagsInput, setTagsInput] = useState({
     tags:""
@@ -195,11 +192,18 @@ const fetchallblogs = async () => {
       try {
         
         const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
-        // console.log("this is login response : ",response);
+        console.log("this is auth response : ",response);
          
         if (response.data.success) {
           
           setLogin(true);
+
+          const imgresponse=await axios.get(`http://localhost:4000/api/v1/fetchprofile/${response.data.payload.email}`);
+
+          console.log("this is img response ",imgresponse);
+
+          setimgulr(imgresponse.data.profile.imageurl);
+          console.log("this is img url : ",imgurl);
           // console.log("yes",response);
           // console.log("this is logged in status ", true);
           
@@ -233,9 +237,9 @@ const fetchallblogs = async () => {
     {isLoggedIn?
     <div className='flex relative  flex-col overflow-y-hidden gap-[30px]  w-screen'>
 
-    <div><Heading  dark={dark} setDark={setDark} isLoggedIn={isLoggedIn} setLogin={setLogin} /></div>
+    <div><Heading imgurl={imgurl}  dark={dark} setDark={setDark} isLoggedIn={isLoggedIn} setLogin={setLogin} /></div>
 
-    <div className='absolute  top-[24px] sm:top-[35px] md:relative p-2   sm:px-[10px] items-center  h-auto flex sm:justify-center w-full '>
+    <div className='absolute  top-[24px] lg:top-[-20px] sm:top-[10px] md:relative p-4   sm:px-[10px] items-center  h-auto flex sm:justify-center w-full '>
 
 
     {searchbytag && !searchbyauther && !searchbycategory && (
@@ -380,44 +384,17 @@ const fetchallblogs = async () => {
   
   </div>
   :
-  <div className='w-full flex flex-col gap-[30px] items-center'>
+  <div className='w-screen h-screen flex  justify-center  items-center'>
       
 
-        <div className='heading h-[100px] w-full flex justify-between  md:h-[120px] relative bg-gradient-to-r from-cyan-500 to-blue-500 px-4  items-center shadow-lg'>
-    {
-      dark ? (
-        <div className='flex justify-between w-full'>
-          <NavLink to='/home' ><img className=' hover:cursor-pointer w-[24px] h-[24px] sm:w-[50px] sm:h-[50px] hover:scale-110 duration-150' src={home} /></NavLink>
-
-          
-          <img src={sun} className=" w-[24px] h-[24px] sm:w-[50px] sm:h-[50px]  hover:cursor-pointer hover:scale-110 duration-150" onClick={brightness} />
-          
-          
-          
-          
-          </div>
-
-      ) : (
-        <div className='flex justify-between w-full'>
-          <NavLink to='/home' ><img className=' hover:cursor-pointer w-[24px] h-[24px] sm:w-[50px] sm:h-[50px] hover:scale-110 duration-150' src={home} /></NavLink>
-
-         
-          <img src={moon} className=" w-[24px] h-[24px] sm:w-[50px] sm:h-[50px]  hover:cursor-pointer hover:scale-110 duration-150" onClick={darkness} />
-          
-         
-          
-          </div>
-      )
-
-    }
-        </div>
         
-       <div className=' card flex flex-col gap-[20px] w-auto h-auto py-7 px-10 justify-center rounded-tl-3xl rounded-tr-md rounded-br-3xl rounded-bl-md items-center bg-gradient-to-r from-cyan-500 to-blue-500 shadow-2xl scale-75 sm:scale-100 '>
-       <img src={sessionlogintimer} className='w-[300px] h-[300px] rounded-full  ' />
+        
+       <div className=' card flex flex-col gap-[20px] w-auto h-auto py-7 px-10 justify-center rounded-tl-3xl rounded-tr-md rounded-br-3xl rounded-bl-md items-center shadow-2xl scale-75 sm:scale-100 '>
+       <img src={sessionlogintimer} className='w-[200px] h-[200px] rounded-full  ' />
 
-       <p className='text-slate-200 text-sm  sm:text-md font-mono'>Your Session Has Expired</p>
+       <p className='text-slate-500 text-sm  sm:text-md font-mono'>Your Session Has Expired</p>
 
-       <p className='text-slate-200  text-center  text-md font-mono'>Kindly Login to experience CU blog</p>
+       <p className='text-slate-500  text-center  text-md font-mono'>Kindly Login to experience CU blog</p>
 
        
         <NavLink to='/login' >
@@ -431,8 +408,10 @@ const fetchallblogs = async () => {
          
        </div>
 
-       {/* <Footer /> */}
-    </div>}
+       
+    </div>
+    
+    }
   </div>
   )
 }
