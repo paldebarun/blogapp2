@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import imageplaceholder from '../images/icons8-test-account-64.png';
-import job from '../images/icons8-job-49.png'
-import country from '../images/icons8-country-64.png'
-import mail from '../images/icons8-mail-50.png'
-import like from '../images/icons8-heart-100.png'
+
 import { NavLink } from 'react-router-dom';
-import edit from '../images/icons8-edit-30.png'
+import { GrFormClose, GrSend } from 'react-icons/gr'
 
 const Profilesection = ({ payload }) => {
   const [profile, setProfile] = useState({
@@ -20,6 +17,14 @@ const Profilesection = ({ payload }) => {
     likesCount: [],
     bio: ""
   });
+
+  const [emailboxopen,setemailbox]=useState(false);
+
+  const emailboxhandler=()=>{
+    
+    setemailbox(!emailboxopen);
+
+  }
 
 
 
@@ -49,14 +54,23 @@ const Profilesection = ({ payload }) => {
   }, []);
 
   return (
-    <div className='flex flex-col h-auto items-start gap-[20px] p-7  '>
+    <div className='flex flex-col h-auto items-start gap-[10px]   '>
 
-      <div className='image-username w-[280px] sm:w-[400px] lg:w-[500px] border h-auto flex flex-col items-center gap-[5px] sm:gap-[20px]  '>
-        <img src={profile.imageurl ? profile.imageurl : imageplaceholder} className='w-[100px] h-[100px]  sm:w-[150px] sm:h-[150px] rounded-full object-cover' />
+      <div className='image-username w-screen  h-auto gap-[10px] flex-col sm:flex-row  sm:gap-[100px] flex items-start px-[20px] sm:px-[100px] justify-start   '>
 
 
-        <div className='flex flex-col  items-start'>
-          <div className='flex justify-start gap-[10px] items-center'>
+        <img src={profile.imageurl ? profile.imageurl : imageplaceholder} className='w-[120px] md:w-[150px] md:h-[150px] h-[120px]  lg:w-[200px] lg:h-[200px] rounded-full object-cover' />
+
+
+       
+
+
+        
+
+     <div className='flex flex-col sm:scale-100 scale-90 items-start md:justify-center gap-[10px]  relative h-auto w-[200px]'>
+       
+     <div className='flex flex-col  items-start'>
+          <div className='flex w-[200px] justify-start gap-[10px] items-center'>
 
             <div className='w-auto  text-slate-600 text-sm sm:text-lg '>
               {
@@ -66,7 +80,7 @@ const Profilesection = ({ payload }) => {
 
             </div>
 
-            <NavLink to='/editbio' className='flex justify-center items-center hover:shadow-md hover:scale-105 duration-150 bg-slate-300 w-[60px] h-[30px] rounded-[10px]' >
+            <NavLink to='/editbio' className='flex justify-center items-center hover:shadow-md hover:scale-105 duration-150 bg-slate-300 sm:scale-100 scale-90 w-[60px] h-[30px] rounded-[10px]' >
 
               <p className='text-slate-500 text-sm font-mono'>Edit</p>
 
@@ -84,17 +98,14 @@ const Profilesection = ({ payload }) => {
 
         </div>
 
-
-        <div className='bio-section  h-auto w-[200px]  mx-auto rounded-md  text-slate-500 flex flex-wrap justify-start'>
+        <div className='bio-section  h-auto w-[200px]  mx-auto   text-slate-500 flex flex-wrap justify-start'>
         {
           profile.bio ? profile.bio : ""
         }
 
       </div>
-     <div className='flex justify-center gap-[10px] w-full'>
-     
         
-        <div className=' text-slate-500 w-auto  text-xs flex items-center justify-center '>
+        <div className=' text-slate-500 w-auto  text-xs lg:text-sm flex items-center justify-center '>
         job : 
           {
             profile.job ? (profile.job.length > 12 ? profile.job.slice(0, 12) : profile.job) : "job"
@@ -103,40 +114,47 @@ const Profilesection = ({ payload }) => {
       
 
     
-        <div className='border rounded-md hover:shadow-lg   text-slate-500 w-auto  flex items-center justify-center text-xs'>
+        <div className='    lg:text-sm   text-slate-500 w-auto  flex items-center justify-center text-xs'>
 
         country :
           {
             profile.country ? profile.country : ""
           }
         </div>
-
-      
-      </div>
-
-
-
-      </div>
-      
-
-      
-
-      
-
-      <div className='mail-section w-[80%] mx-auto flex gap-[10px] '>
-        <img src={mail} className='w-[60px] h-[60px] rounded-full hover:-translate-y-1 hover:cursor-pointer' />
-        <div className='border rounded-md hover:shadow-lg   break-words  text-slate-500 w-[200px] sm:w-[40%] h-auto flex items-center justify-center'>
+        
+       
+        
+        <div className={profile.email.length>12 ?'hover:cursor-pointer lg:text-sm   text-slate-500 w-auto  flex items-center justify-center text-xs':'lg:text-sm   text-slate-500 w-auto  flex items-center justify-center text-xs'} onClick={profile.email.length>12 ? emailboxhandler : ()=>{}}>
+        email :
           {
-            profile.email ? (profile.email.length > 12 ? `${profile.email.slice(0, 12)}...` : (profile.email)) : "email"
+            profile.email ?  (profile.email.length > 12 ? `${profile.email.slice(0, 12)}...` : (profile.email)) : "email"
           }
         </div>
+       
+       
+<div className={emailboxopen ?'absolute text-sm bottom-[-20px] bg-slate-400 animate-bounce p-2 rounded-lg text-white':'hidden'}>
+        <div className='w-full flex justify-end'>
+        <GrFormClose onClick={emailboxhandler}  className='hover:cursor-pointer w-auto invert '/>
+        </div>
+        
+        
+        {
+          profile.email ? (profile.email.length >12 ? (profile.email):"") : <div></div>
+        }
+       </div>
 
+      
+      
       </div>
 
-      <div className='likes flex items-center sm:mx-auto w-[200px] sm:w-[80%] mx-auto'>
-        <img src={like} className='w-[50px] h-[50px] hover:-translate-y-1 hover:cursor-pointer' />
-        <p className='w-auto '>{profile.likesCount.length}</p>
+      
+
       </div>
+      
+
+      
+
+
 
       <div className='h-[100px]'></div>
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import Heading from '../components/Heading';
+import sessionlogintimer from '../images/blogexpitredimage.jpeg'
 import axios from 'axios'
 import { NavLink } from 'react-router-dom';
-import sessionlogintimer from '../images/5228679.jpg'
-import Footer from '../components/Footer';
+
+
 
  const Basepage = () => {
 
@@ -39,18 +39,18 @@ import Footer from '../components/Footer';
 
 {
     isLoggedIn?(
-    <Heading/>
+   <div></div>
     
 
-    ):( <div className='w-full flex flex-col gap-[30px] items-center'>
-        <Heading setDark={setDark} dark={dark}/>
+    ):( <div className='w-screen h-screen justify-center flex flex-col gap-[30px] items-center'>
+       
         
-       <div className=' card flex flex-col gap-[20px] w-auto h-auto py-7 px-10 justify-center rounded-tl-3xl rounded-tr-md rounded-br-3xl rounded-bl-md items-center bg-gradient-to-r from-cyan-500 to-blue-500 shadow-2xl scale-75 sm:scale-100 '>
-       <img src={sessionlogintimer} className='w-[300px] h-[300px] rounded-full  ' />
+       <div className=' card flex flex-col gap-[20px] w-auto h-auto py-7 px-10 justify-center rounded-tl-3xl rounded-tr-md rounded-br-3xl rounded-bl-md items-center  shadow-2xl scale-75 sm:scale-100 '>
+       <img src={sessionlogintimer} className='w-[200px] h-[200px] rounded-full  ' />
 
-       <p className='text-slate-200 text-sm  sm:text-md font-mono'>Your Session Has Expired</p>
+       <p className='text-slate-500 text-sm  sm:text-md font-mono'>Your Session Has Expired</p>
 
-       <p className='text-slate-200  text-center  text-md font-mono'>Kindly Login to experience CU blog</p>
+       <p className='text-slate-500  text-center  text-md font-mono'>Kindly Login to experience CU blog</p>
 
        
         <NavLink to='/login' >
@@ -66,7 +66,7 @@ import Footer from '../components/Footer';
 
     </div>)
 }
-<Footer />
+
 
     </div>
   )
