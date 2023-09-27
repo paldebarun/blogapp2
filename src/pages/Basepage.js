@@ -19,7 +19,7 @@ import { NavLink } from 'react-router-dom';
           };
       
           try {
-            const response = await axios.get('https://blog-server-gbxk.onrender.com/api/v1/auth', { headers });
+            const response = await axios.get('https://blogserver3.onrender.com/api/v1/auth', { headers });
             if (response.data.success) {
               setLogin(true);
               window.location.href='/home'

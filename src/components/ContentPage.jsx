@@ -43,7 +43,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
     try {
       setcommentloading(true);
-      const response = await axios.post(`http://localhost:4000/api/v1/fetchcomments`, { blog_id: blogId });
+      const response = await axios.post(`https://blogserver3.onrender.com/api/v1/fetchcomments`, { blog_id: blogId });
       console.log(response);
       if (response.data.success) {
         setBlogComments((prevComments) => ({
@@ -67,7 +67,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
       if (!blogComments[blogId]) {
         setcommentloading(true);
-        const response = await axios.post(`http://localhost:4000/api/v1/fetchcomments`, { blog_id: blogId });
+        const response = await axios.post(`https://blogserver3.onrender.com/api/v1/fetchcomments`, { blog_id: blogId });
         console.log(response);
         if (response.data.success) {
           setBlogComments((prevComments) => ({
@@ -122,7 +122,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
         body: newComment,
       }
       console.log("object of new commwnt", obj);
-      const response = await axios.post('http://localhost:4000/api/v1/addcomment', obj);
+      const response = await axios.post('https://blogserver3.onrender.com/api/v1/addcomment', obj);
       console.log("the add comment response : ", response);
       if (response.data.success) {
 
@@ -151,7 +151,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
     try {
       console.log("comment id : ", commentId);
       setcommentloading(true);
-      const response = await axios.post('http://localhost:4000/api/v1/uncomment', {
+      const response = await axios.post('https://blogserver3.onrender.com/api/v1/uncomment', {
         userEmail: payload.email,
         commentId: commentId
       });
@@ -187,7 +187,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
           Authorization: `Bearer ${token}`,
         };
         setLoading(true);
-        const response = await axios.get('https://blog-server-gbxk.onrender.com/api/v1/auth', { headers });
+        const response = await axios.get('https://blogserver3.onrender.com/api/v1/auth', { headers });
         console.log("response : ", response);
         if (response.data.success) {
           console.log("this is it");
@@ -200,7 +200,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
         console.log("payload : ", payload);
 
         setLoading(true);
-        const url = `https://blog-server-gbxk.onrender.com/api/v1/fetchallblogs`;
+        const url = `https://blogserver3.onrender.com/api/v1/fetchallblogs`;
         const response_second = await axios.get(url);
 
         setLoading(false);
@@ -213,12 +213,12 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
         // Check and update islikeArray for already liked blogs
         if (payload && payload.email) {
-          const user = await axios.post('http://localhost:4000/api/v1/fetchuser', { email: payload.email });
+          const user = await axios.post('https://blogserver3.onrender.com/api/v1/fetchuser', { email: payload.email });
           if (user.data.user) {
             const userId = user.data.user._id;
             for (let i = 0; i < response_second.data.blogs.length; i++) {
               const blogId = response_second.data.blogs[i]._id;
-              const existingLike = await axios.post(`http://localhost:4000/api/v1/checklike`, { blog_id: blogId, user_id: userId });
+              const existingLike = await axios.post(`https://blogserver3.onrender.com/api/v1/checklike`, { blog_id: blogId, user_id: userId });
               if (existingLike.data.liked) {
                 setIsLikeArray(prevState => {
                   const newState = [...prevState];
@@ -247,7 +247,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
     try {
       setlikeloader(true);
-      const response = await axios.post(`http://localhost:4000/api/v1/fetchlikesauthernames`, { blog_id: blogId });
+      const response = await axios.post(`https://blogserver3.onrender.com/api/v1/fetchlikesauthernames`, { blog_id: blogId });
 
       console.log(response);
       if (response.data.success) {
@@ -272,7 +272,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
     try {
       
       setlikeloader(true);
-      const response = await axios.post(`http://localhost:4000/api/v1/fetchlikesauthernames`, { blog_id: blogId });
+      const response = await axios.post(`https://blogserver3.onrender.com/api/v1/fetchlikesauthernames`, { blog_id: blogId });
 
       console.log("this is lik container response ", response);
       if (response.data.success) {
@@ -301,13 +301,13 @@ const ContentPage = ({ blogs, setBlogs }) => {
     try {
 
       console.log(payload.email);
-      const user = await axios.post('http://localhost:4000/api/v1/fetchuser', { email: payload.email });
+      const user = await axios.post('https://blogserver3.onrender.com/api/v1/fetchuser', { email: payload.email });
 
       console.log("this is user : ", user);
       console.log("user id : ", user.data.user._id);
       console.log("blog id : ", blogid);
       const existingLike = await axios.post(
-        `http://localhost:4000/api/v1/checklike`,
+        `https://blogserver3.onrender.com/api/v1/checklike`,
         {
           blog_id: blogid,
           user_id: user.data.user._id,
@@ -321,7 +321,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
       if (existingLike.data.liked) {
         setlikeloader(true);
-        const response = await axios.post('http://localhost:4000/api/v1/unlike', { id: user.data.user._id, blog_id: blogid });
+        const response = await axios.post('https://blogserver3.onrender.com/api/v1/unlike', { id: user.data.user._id, blog_id: blogid });
 
         console.log("unlike response: ", response);
 
@@ -342,7 +342,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
       } else {
 
         const response = await axios.post(
-          `http://localhost:4000/api/v1/like`,
+          `https://blogserver3.onrender.com/api/v1/like`,
           { blog_id: blogid, id: user.data.user._id }
         );
 

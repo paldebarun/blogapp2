@@ -26,7 +26,7 @@ const Dashboard = () => {
 
         try {
           setloading(true);
-          const response = await axios.get('https://blog-server-gbxk.onrender.com/api/v1/auth', { headers });
+          const response = await axios.get('https://blogserver3.onrender.com/api/v1/auth', { headers });
           setloading(false);
           if (response.data.success) {
             
@@ -34,7 +34,7 @@ const Dashboard = () => {
             setPayload( response.data.payload ); // Set payload on first render
             console.log("payload : ",payload);
 
-            const imgresponse=await axios.get(`http://localhost:4000/api/v1/fetchprofile/${response.data.payload.email}`);
+            const imgresponse=await axios.get(`https://blogserver3.onrender.com/api/v1/fetchprofile/${response.data.payload.email}`);
 
           console.log("this is img response ",imgresponse);
 

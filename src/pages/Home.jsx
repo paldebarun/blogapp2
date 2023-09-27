@@ -77,7 +77,7 @@ const searchByTags = async () => {
     const tags =tagsInput.tags;
    
     const response = await axios.post(
-      'http://localhost:4000/api/v1/search',
+      'https://blogserver3.onrender.com/api/v1/search',
       { tags:tags }
     );
 
@@ -103,7 +103,7 @@ const searchbycategoryfunction = async () => {
     const category =categoryInput.category;
    
     const response = await axios.post(
-      'http://localhost:4000/api/v1/searchbycategory',
+      'https://blogserver3.onrender.com/api/v1/searchbycategory',
       { category:category }
     );
     
@@ -129,7 +129,7 @@ const searchbycAutherfunction = async () => {
     const autherName =authername.authername;
    
     const response = await axios.post(
-      'http://localhost:4000/api/v1/fetchbyauthername',
+      'https://blogserver3.onrender.com/api/v1/fetchbyauthername',
       { auther:autherName }
     );
     
@@ -156,7 +156,7 @@ const fetchallblogs = async () => {
     
    
     const response = await axios.get(
-      'https://blog-server-gbxk.onrender.com/api/v1/fetchallblogs',
+      'https://blogserver3.onrender.com/api/v1/fetchallblogs',
      
     );
     
@@ -191,14 +191,14 @@ const fetchallblogs = async () => {
       
       try {
         
-        const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
+        const response = await axios.get('https://blogserver3.onrender.com/api/v1/auth', { headers });
         console.log("this is auth response : ",response);
          
         if (response.data.success) {
           
           setLogin(true);
 
-          const imgresponse=await axios.get(`http://localhost:4000/api/v1/fetchprofile/${response.data.payload.email}`);
+          const imgresponse=await axios.get(`https://blogserver3.onrender.com/api/v1/fetchprofile/${response.data.payload.email}`);
 
           console.log("this is img response ",imgresponse);
 

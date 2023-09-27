@@ -34,7 +34,7 @@ const Profilesection = ({ payload }) => {
         try {
           console.log("this is payload", payload);
           console.log("profile section initiated");
-          const url = `https://blog-server-gbxk.onrender.com/api/v1/fetchprofile/${payload.email}`;
+          const url = `https://blogserver3.onrender.com/api/v1/fetchprofile/${payload.email}`;
           const response = await axios.get(url);
           console.log("this is response : ", response);
           const fetchedprofile = response.data.profile;

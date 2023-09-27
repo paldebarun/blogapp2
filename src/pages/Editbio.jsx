@@ -26,7 +26,7 @@ const Editbio = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post('https://blog-server-gbxk.onrender.com/api/v1/updateProfile', formdata);
+      const response = await axios.post('https://blogserver3.onrender.com/api/v1/updateProfile', formdata);
       console.log("this is the response1", response);
        
       setLoading(false);
@@ -51,7 +51,7 @@ const Editbio = () => {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get('https://blog-server-gbxk.onrender.com/api/v1/auth', { headers });
+        const response = await axios.get('https://blogserver3.onrender.com/api/v1/auth', { headers });
 
         if(response.data.success){
           
@@ -63,7 +63,7 @@ const Editbio = () => {
         const payload = response.data.payload;
  
 
-        const url = `https://blog-server-gbxk.onrender.com/api/v1/fetchprofile/${payload.email}`;
+        const url = `https://blogserver3.onrender.com/api/v1/fetchprofile/${payload.email}`;
         const response_second = await axios.get(url);
 
 

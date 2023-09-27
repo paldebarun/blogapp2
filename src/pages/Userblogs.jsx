@@ -29,7 +29,7 @@ const [blogComments, setBlogComments] = useState({});
 // Define a function to fetch like counts for a single blog
 const fetchLikeCount = async (blogId) => {
   try {
-    const response = await axios.post('http://localhost:4000/api/v1/fetchlikesauthernames', { blog_id: blogId });
+    const response = await axios.post('https://blogserver3.onrender.com/api/v1/fetchlikesauthernames', { blog_id: blogId });
     if (response.data.success) {
       return response.data.authorNames.length; 
     }
@@ -51,10 +51,10 @@ useEffect(() => {
         Authorization: `Bearer ${token}`,
       };
       setLoading(true);
-      const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
+      const response = await axios.get('https://blogserver3.onrender.com/api/v1/auth', { headers });
       if (response.data.success) {
         const payload = response.data.payload;
-        const url = `http://localhost:4000/api/v1/userblogs/${payload.email}`;
+        const url = `https://blogserver3.onrender.com/api/v1/userblogs/${payload.email}`;
         const response_second = await axios.get(url);
         setblogs(response_second.data.blogs);
         
@@ -85,7 +85,7 @@ const deleteBlog = async (_id) => {
       id:_id
     }
     setLoading(true);
-    const response = await axios.post(`http://localhost:4000/api/v1/deleteBlog`,obj);
+    const response = await axios.post(`https://blogserver3.onrender.com/api/v1/deleteBlog`,obj);
     setLoading(false);
     console.log("delete response: ", response);
     window.location.reload();
@@ -109,7 +109,7 @@ useEffect(() => {
         Authorization: `Bearer ${token}`,
       };
      setLoading(true);
-      const response = await axios.get('http://localhost:4000/api/v1/auth', { headers });
+      const response = await axios.get('https://blogserver3.onrender.com/api/v1/auth', { headers });
      console.log("response : ",response);
       if(response.data.success){
         console.log("this is it");
@@ -121,7 +121,7 @@ useEffect(() => {
       const payload = response.data.payload;
       console.log("payload : ",payload);
       
-      const url = `http://localhost:4000/api/v1/userblogs/${payload.email}`;
+      const url = `https://blogserver3.onrender.com/api/v1/userblogs/${payload.email}`;
       const response_second = await axios.get(url);
      
 
@@ -149,7 +149,7 @@ const commentsectionhandler = async (blogId) => {
 
     if (!blogComments[blogId]) {
       setcommentloading(true);
-      const response = await axios.post(`http://localhost:4000/api/v1/fetchcomments`, { blog_id: blogId });
+      const response = await axios.post(`https://blogserver3.onrender.com/api/v1/fetchcomments`, { blog_id: blogId });
       console.log(response);
       if (response.data.success) {
         setBlogComments((prevComments) => ({
