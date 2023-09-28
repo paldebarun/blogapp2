@@ -2,9 +2,6 @@ import React, { useEffect } from 'react'
 import {NavLink} from 'react-router-dom'
 import logo from '../images/CUBlogs.png'
 import {CgProfile} from "react-icons/cg";
-
-import login from '../images/icons8-login-64.png'
-import logout from '../images/icons8-logout-64.png'
 import {GoHome} from 'react-icons/go'
 import {GoHomeFill}  from 'react-icons/go'
 import {IoIosLogOut} from 'react-icons/io'
@@ -14,7 +11,9 @@ import {BsPlusSquareFill} from 'react-icons/bs'
 import {AiOutlineCaretDown} from 'react-icons/ai'
 
 
- const Heading = ({imgurl,setDark,setLogin,isLoggedIn}) => {
+
+
+ const Heading = ({inhome,increateblog,imgurl,setDark,setLogin,isLoggedIn}) => {
   
   useEffect(()=>{
     const fetchdata=async ()=>{
@@ -59,11 +58,11 @@ import {AiOutlineCaretDown} from 'react-icons/ai'
           <div className='md:flex gap-[20px] lg:gap-[50px] hidden justify-center items-center'>
           
           <NavLink to='/home' >
-          <GoHome className='sm:w-[28px] sm:h-[28px] lg:w-[33px] hover:cursor-pointer  lg:h-[33px] hover:scale-110 duration-150' />
+          {inhome ? <GoHomeFill className='sm:w-[28px] sm:h-[28px] lg:w-[33px] hover:cursor-pointer  lg:h-[33px] hover:scale-110 duration-150' /> : <GoHome className='sm:w-[28px] sm:h-[28px] lg:w-[33px] hover:cursor-pointer  lg:h-[33px] hover:scale-110 duration-150' />}
           </NavLink>
 
           <NavLink to='/add'  >
-          <BsPlusSquare className='sm:w-[21px] sm:h-[21px] hover:cursor-pointer lg:w-[26px] lg:h-[26px] hover:scale-110 duration-150'/>
+          {increateblog ? <BsPlusSquareFill className='sm:w-[21px] sm:h-[21px] hover:cursor-pointer lg:w-[26px] lg:h-[26px] hover:scale-110 duration-150' /> : <BsPlusSquare className='sm:w-[21px] sm:h-[21px] hover:cursor-pointer lg:w-[26px] lg:h-[26px] hover:scale-110 duration-150'/>}
           </NavLink>
           
           <NavLink to='/dashboard' className='flex group flex-col justify-center items-center' >

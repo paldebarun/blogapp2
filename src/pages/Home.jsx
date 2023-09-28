@@ -13,6 +13,8 @@ import {IoIosLogIn} from 'react-icons/io'
 import {BsPlusSquare} from 'react-icons/bs'
 import {AiOutlineCaretDown} from 'react-icons/ai'
 import {CgProfile} from "react-icons/cg";
+import {GoHomeFill} from 'react-icons/go'
+import {AiFillPlusSquare} from 'react-icons/ai'
 
 
 const Home = () => {
@@ -39,6 +41,11 @@ const Home = () => {
   const [authername,setauthername]=useState({
     authername:""
   })
+
+  const [inhome,setinhome]=useState(false);
+ 
+  const [increateblog,setincreateblog]=useState(false);
+
 
 
   const changetagsinputhandler = (event) => {
@@ -227,8 +234,17 @@ const fetchallblogs = async () => {
           // console.log("yes",response);
           // console.log("this is logged in status ", true);
           
+           if(window.location.pathname==='/home'){setinhome(true)
+          
+          }
+
+           
+
+           else if(window.location.pathname==='/add')setincreateblog(true);
+
         }
         
+
 
       
 
@@ -257,7 +273,7 @@ const fetchallblogs = async () => {
     {isLoggedIn?
     <div className='flex relative  flex-col overflow-y-hidden gap-[30px]  w-screen'>
 
-    <div><Heading imgurl={imgurl}  dark={dark} setDark={setDark} isLoggedIn={isLoggedIn} setLogin={setLogin} /></div>
+    <div><Heading inhome={inhome} increateblog={increateblog} imgurl={imgurl}  dark={dark} setDark={setDark} isLoggedIn={isLoggedIn} setLogin={setLogin} /></div>
 
     <div className='absolute  top-[24px] lg:top-[-20px] sm:top-[10px] md:relative p-4   sm:px-[10px] items-center  h-auto flex sm:justify-center w-full '>
 
@@ -380,11 +396,13 @@ const fetchallblogs = async () => {
           <div className='md:hidden gap-[20px] lg:gap-[20px] flex flex-col justify-center items-center'>
           
           <NavLink to='/home' >
-          <GoHome className='sm:w-[28px] w-[20px] h-[20px] sm:h-[28px] lg:w-[33px] hover:cursor-pointer  lg:h-[33px] hover:scale-110 duration-150' />
+          {inhome ?
+           <GoHomeFill className='sm:w-[28px] w-[20px] h-[20px] sm:h-[28px] lg:w-[33px] hover:cursor-pointer  lg:h-[33px] hover:scale-110 duration-150'  /> :<GoHome className='sm:w-[28px] w-[20px] h-[20px] sm:h-[28px] lg:w-[33px] hover:cursor-pointer  lg:h-[33px] hover:scale-110 duration-150' />}
+          
           </NavLink>
 
           <NavLink to='/add'  >
-          <BsPlusSquare className='sm:w-[21px] sm:h-[21px] hover:cursor-pointer lg:w-[26px] lg:h-[26px] hover:scale-110 duration-150'/>
+          {increateblog ?<AiFillPlusSquare className='sm:w-[21px] sm:h-[21px] hover:cursor-pointer lg:w-[26px] lg:h-[26px] hover:scale-110 duration-150'/>  :<BsPlusSquare className='sm:w-[21px] sm:h-[21px] hover:cursor-pointer lg:w-[26px] lg:h-[26px] hover:scale-110 duration-150'/>}
           </NavLink>
           
           <NavLink to='/dashboard' className='flex group flex-col justify-center items-center' >

@@ -16,6 +16,8 @@ import {CgProfile} from "react-icons/cg";
 import {BsPlusSquare} from 'react-icons/bs'
 import {AiOutlineCaretDown} from 'react-icons/ai'
 
+
+
 const Profilesection = ({ payload }) => {
   const [profile, setProfile] = useState({
     _id: "",
@@ -114,6 +116,13 @@ const loginfunctionality=()=>{
           const url = `https://blogserver3.onrender.com/api/v1/userblogs/${payload.email}`;
           const response_second = await axios.get(url);
           setblogs(response_second.data.blogs);
+
+          const imgresponse=await axios.get(`https://blogserver3.onrender.com/api/v1/fetchprofile/${response.data.payload.email}`);
+
+          console.log("this is img response ",imgresponse);
+
+          setimgulr(imgresponse.data.profile.imageurl);
+          console.log("this is img url : ",imgurl);
           
           // Fetch and update like counts for each blog
           const likeCountsData = {};
