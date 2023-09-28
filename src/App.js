@@ -10,7 +10,7 @@ import SuccessSignupPage from './pages/SuccessSignupPage';
 import ErrorLoginPage from './pages/ErrorLoginPage';
 import Basepage from './pages/Basepage'
 import CreateBlog from './pages/CreateBlog';
-import Userblogs from './pages/Userblogs';
+
 import Otpage from './pages/Otpage';
 import Otpexpirepage from './pages/Otpexpirepage';
 import Otpgeneratepage from './pages/Otpgeneratepage';
@@ -31,7 +31,7 @@ function App() {
         <Route path="/success" element={<SuccessSignupPage />} />
         <Route path="/errorlogin" element={<ErrorLoginPage />} />
         <Route path='/add' element={<CreateBlog />} />
-        <Route path='/userblogs' element={<Userblogs />} />
+      
         <Route path='/otp-page' element={<Otpage />} />
         <Route path='/otp-expired' element={<Otpexpirepage />} />
         <Route path='/otp-generate' element={<Otpgeneratepage />} />
