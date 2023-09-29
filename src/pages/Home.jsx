@@ -449,6 +449,8 @@ const fetchallblogs = async () => {
 
   
     {/* <Footer /> */}
+
+    <div className='w-screen h-[70px] sm:h-[100px]'></div>
   
   </div>
   :

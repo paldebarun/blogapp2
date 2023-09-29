@@ -2,13 +2,13 @@ import React from 'react'
 import { useState } from 'react';
 import axios from 'axios'
 import Footer from '../components/Footer';
-import save from '../images/icons8-save-50.png'
+
 import sessionlogintimer from '../images/../images/5228679.jpg'
 import { NavLink } from 'react-router-dom';
 import sun from '../images/icons8-light-on-48.png'
 import moon from '../images/icons8-reflector-bulb-48.png'
 import home from '../images/icons8-homepage-48.png'
-import note from '../images/icons8-note-64.png'
+
 
  const Createblogcontent = ({payload,isLoggedIn,setlogin}) => {
 
@@ -78,53 +78,58 @@ import note from '../images/icons8-note-64.png'
       isLoggedIn ? 
       
       (
-       <div className='w-full h-auto p-4 flex justify-center'>
-        <form  onSubmit={submitForm} className='flex flex-col gap-[20px] w-[500px] p-3 items-center '>
-          <p className=' text-md md:text-3xl text-center text-slate-400 font-mono'>Create your blog here </p>
+       <div className='w-screen h-auto p-4 flex justify-center'>
+
+        <form  onSubmit={submitForm} className='flex flex-col gap-[15px] md:gap-[20px] lg:gap-[50px] w-full p-3 items-center '>
+        <div className='lg:h-[100px] h-[70px] flex justify-center items-center '>
+
+        <p className=' text-md md:text-xl text-center  text-slate-400 font-mono'>Create your blog here </p>
+        </div>
+          
          
          <div className='flex gap-[10px] items-center'>
-         <img  src={note} className='w-[30px] h-[30px]'/>
-         <textarea type="text" placeholder='blog name' className='text-center md:w-[500px] p-2 border rounded-lg' name="name" value={formdata.name} onChange={changeHandler}>
+         
+         <textarea type="text" placeholder='blog name' className='text-center md:w-[300px] p-2 border rounded-lg outline-none' name="name" value={formdata.name} onChange={changeHandler}>
             
             </textarea></div>
 
 
         <div className='flex gap-[10px] items-center'>
-        <img  src={note} className='w-[30px] h-[30px]'/>
+        
         <textarea type="text" placeholder="heading of the blog" onChange={changeHandler}
-          className='text-center p-2 border rounded-lg md:w-[500px]' name="heading" value={formdata.heading} ></textarea>
+          className='text-center p-2 border outline-none rounded-lg md:w-[300px]' name="heading" value={formdata.heading} ></textarea>
         </div>
 
          
 
          <div className='flex gap-[10px] items-center'>
-         <img  src={note} className='w-[30px] h-[30px]'/>
+         
          <textarea type="text" placeholder="auther of the blog" onChange={changeHandler}
-          className='text-center p-2 border rounded-lg md:w-[500px]' name="auther" value={formdata.auther} ></textarea>
+          className='text-center p-2 border outline-none rounded-lg w-[300px]  md:w-[400px]' name="auther" value={formdata.auther} ></textarea>
          </div>
       
          
       <div className='flex gap-[10px] items-center'>
-        <img  src={note} className='w-[30px] h-[30px]'/>
+      
 
         <textarea type="text" placeholder="content of the blog" onChange={changeHandler}
-          className='text-center p-2 border h-[200px] rounded-lg md:w-[500px]' name="content" value={formdata.content} ></textarea>
+          className='text-center p-2 border h-[400px] outline-none w-[400px] sm:w-[500px] rounded-lg md:w-[700px] lg:w-[1000px]' name="content" value={formdata.content} ></textarea>
 
       </div>
 
 
       <div className='flex gap-[10px] items-center'>
-         <img  src={note} className='w-[30px] h-[30px]'/>
+        
          <textarea type="text" placeholder="category of the blog" onChange={changeHandler}
-          className='text-center p-2 border rounded-lg md:w-[500px]' name="category" value={formdata.category} ></textarea>
+          className='text-center p-2 border outline-none rounded-lg md:w-[300px]' name="category" value={formdata.category} ></textarea>
          </div>
 
          <div className='flex gap-[10px] items-center'>
-         <img src={note} className='w-[30px] h-[30px]' />
+         
         <input
     type='text'
     placeholder='tags (comma-separated)'
-    className='text-center p-2 border rounded-lg md:w-[500px]'
+    className='text-center p-2 border outline-none rounded-lg md:w-[500px]'
     name='tags'
     value={formdata.tags.join(', ')}
     onChange={changeHandler}
@@ -132,9 +137,9 @@ import note from '../images/icons8-note-64.png'
 </div>
 
       
-        <button onSubmit={submitForm} type="submit" className='flex gap-[10px] hover:shadow-xl hover:scale-105 duration-150 bg-emerald-400 px-8 py-4 rounded-[50px] mx-auto w-[200px]  items-center'>
-          <img src={save} />
-          <p className='text-white font-mono'>Save</p>
+        <button onSubmit={submitForm} type="submit" className='flex justify-center  hover:shadow-xl hover:scale-105 duration-200 bg-slate-300 m-4 text-slate-500 hover:text-white  hover:bg-slate-500 transition-all  px-3 py-4 rounded-[50px] mx-auto w-[100px]  items-center'>
+          
+          <p className=' font-mono'>Save</p>
         </button>
       
 

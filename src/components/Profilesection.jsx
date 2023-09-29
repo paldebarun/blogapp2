@@ -488,17 +488,26 @@ const loginfunctionality=()=>{
                 ))}
               </div>
               <AiOutlineDelete onClick={() => deleteBlog(blog._id)} className='hover:cursor-pointer w-[20px] h-[20px]' />
+               
 
             </div>
           ))}
+
+          <div className='w-screen h-[70px] sm:h-[100px]'></div>
+
+
           </div>):(
 
             <div className='w-screen  h-auto p-5 flex flex-col     justify-center items-center gap-[20px]'>
               
              
-              <div className='sm:text-3xl  text-red-500 font-bold font-mono'>No blogs to show !</div>
+              <div className='sm:text-xl  text-slate-400 font-mono'>No blogs to show !</div>
+
+             
 
             </div>
+
+            
           )}
           
 

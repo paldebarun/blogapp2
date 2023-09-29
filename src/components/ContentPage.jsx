@@ -537,9 +537,13 @@ const ContentPage = ({ blogs, setBlogs }) => {
         )
       ) : (
         <div className='w-screen  h-auto p-5 flex flex-col     justify-center items-center gap-[20px]'>
-          <div className='w-full h-full '> <img src={nodatafoundimage} className=' mx-auto sm:w-[300px] md:w-[500px] w-[200px] h-[200px] sm:h-[300px] rounded-xl shadow-xl md:h-[500px]' /></div>
-          <div className='sm:text-3xl  text-red-500 font-bold font-mono'>No blogs to show !</div>
-        </div>
+              
+             
+              <div className='sm:text-xl  text-slate-400 font-mono'>No blogs to show !</div>
+
+             
+
+            </div>
       )}
     </div>
   )
