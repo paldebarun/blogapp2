@@ -30,11 +30,11 @@ const LoginForm = ({ dark ,setLoading}) => {
 
   const submitForm = async (event) => {
     event.preventDefault();
-
+    setLoading(true);
     let response;
   
     try {
-      setLoading(true);
+      
       response = await axios.post('https://blogserver3.onrender.com/api/v1/login', form);
       
       
@@ -42,9 +42,9 @@ const LoginForm = ({ dark ,setLoading}) => {
       if (response.status === 200) {
         localStorage.setItem('token', response.data.user.token);
         
-        setTimeout(()=>{
+        
           window.location.href = '/home';
-        },1000)
+        
 
         setLoading(false);
         
@@ -53,22 +53,25 @@ const LoginForm = ({ dark ,setLoading}) => {
         
       
     } catch (error) {
-      setLoading(false);
+      
 
 
       console.log("response",error);
       if (error.message === "Request failed with status code 404") {
-
+        setLoading(false);
         setuserisnotregistered(true);
         setpassworddoesntmatch(false);
       } else if (error.message === "Request failed with status code 401") {
+        setLoading(false);
         setpassworddoesntmatch(true);
         setuserisnotregistered(false);
       } else if (error.message === "Request failed with status code 400") {
+        setLoading(false);
+
         // Handle other errors if needed
         window.location.href = '/errorlogin';
       }
-
+       
       // Reset error messages and input fields after 2 seconds
       setTimeout(() => {
         setuserisnotregistered(false);

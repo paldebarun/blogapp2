@@ -74,10 +74,7 @@ import home from '../images/icons8-homepage-48.png'
 
   return (
     <div>
-    {
-      isLoggedIn ? 
-      
-      (
+   
        <div className='w-screen h-auto p-4 flex justify-center'>
 
         <form  onSubmit={submitForm} className='flex flex-col gap-[15px] md:gap-[20px] lg:gap-[50px] w-full p-3 items-center '>
@@ -113,7 +110,7 @@ import home from '../images/icons8-homepage-48.png'
       
 
         <textarea type="text" placeholder="content of the blog" onChange={changeHandler}
-          className='text-center p-2 border h-[400px] outline-none w-[400px] sm:w-[500px] rounded-lg md:w-[700px] lg:w-[1000px]' name="content" value={formdata.content} ></textarea>
+          className='text-center p-2 border h-[400px] outline-none w-[300px] sm:w-[500px] rounded-lg md:w-[700px] lg:w-[1000px]' name="content" value={formdata.content} ></textarea>
 
       </div>
 
@@ -153,71 +150,7 @@ import home from '../images/icons8-homepage-48.png'
        </div>
 
 
-      )
 
-      :
-      
-        <div className='w-full flex flex-col gap-[30px] items-center'>
-      
-
-        <div className='heading h-[100px] w-full flex justify-between  md:h-[120px] relative bg-gradient-to-r from-cyan-500 to-blue-500 px-4  items-center shadow-lg'>
-        {
-      dark ? (
-        <div className='flex justify-between w-full'>
-          <NavLink to='/home' ><img className=' hover:cursor-pointer w-[24px] h-[24px] sm:w-[50px] sm:h-[50px] hover:scale-110 duration-150' src={home} /></NavLink>
-
-          
-          <img src={sun} className=" w-[24px] h-[24px] sm:w-[50px] sm:h-[50px]  hover:cursor-pointer hover:scale-110 duration-150" onClick={brightness} />
-          
-          
-          
-          
-          </div>
-         
-
-      ) : (
-        <div className='flex justify-between w-full'>
-          <NavLink to='/home' ><img className=' hover:cursor-pointer w-[24px] h-[24px] sm:w-[50px] sm:h-[50px] hover:scale-110 duration-150' src={home} /></NavLink>
-
-         
-          <img src={moon} className=" w-[24px] h-[24px] sm:w-[50px] sm:h-[50px]  hover:cursor-pointer hover:scale-110 duration-150" onClick={darkness} />
-          
-         
-          
-          </div>
-      )
-
-    }
-        </div>
-        
-       <div className=' card flex flex-col gap-[20px] w-auto h-auto py-7 px-10 justify-center rounded-tl-3xl rounded-tr-md rounded-br-3xl rounded-bl-md items-center bg-gradient-to-r from-cyan-500 to-blue-500 shadow-2xl scale-75 sm:scale-100 '>
-       <img src={sessionlogintimer} className='w-[300px] h-[300px] rounded-full  ' />
-
-       <p className='text-slate-200 text-sm  sm:text-md font-mono'>Your Session Has Expired</p>
-
-       <p className='text-slate-200  text-center  text-md font-mono'>Kindly Login to experience CU blog</p>
-
-       
-        <NavLink to='/login' >
-        <button className='w-[100px] h-[50px] text-slate-200 bg-blue-900 rounded-3xl hover:shadow-cyan-850 hover:shadow-2xl hover:scale-110 duration-150'>
-         
-         Login
-
-        </button>
-        </NavLink>
-        
-         
-       </div>
-
-       <Footer />
-    </div>
-
-      
-
-
-
-
-    }
     
     </div>
   )

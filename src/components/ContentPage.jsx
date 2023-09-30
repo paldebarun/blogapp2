@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import nodatafoundimage from '../images/9214777.jpg';
+
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { AiOutlineSend } from 'react-icons/ai'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { GrFormClose, GrSend } from 'react-icons/gr'
+import { GrFormClose} from 'react-icons/gr'
 import { FcLike } from 'react-icons/fc'
 import { FcLikePlaceholder } from 'react-icons/fc'
 import { FaRegComment } from 'react-icons/fa'
@@ -394,13 +394,13 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
             {blogs.map((blog, index) => (
 
-              <div className='p-2  sm:scale-90 lg:scale-100   h-auto flex flex-col items-start gap-[20px]  relative  w-[90%] md:w-[60%] lg:w-[50%]  break-words mx-auto text-2xl' key={blog._id} >
-              <div className='flex sm:flex-row flex-col  justify-center items-end  gap-[10px]'>
+              <div className='p-2  sm:scale-90 lg:scale-100   h-auto flex flex-col items-start gap-[20px]  relative  w-[90%] md:w-[70%] lg:w-[70%]  break-words mx-auto text-2xl' key={blog._id} >
+              <div className='flex sm:flex-row flex-col w-full  justify-center items-start  gap-[10px]'>
                 <div className='flex text-xs items-center  sm:text-sm md:text-md gap-[3px]   sm:gap-[1px]'>
                 <div className=' text-black font-extrabold  '>{blog.auther}</div>
                 <BsDot className='w-[20px] h-[20px] text-sm ' />
                 </div>
-                  <div className='text-slate-500 text-xs sm:text-sm md:text-md '>
+                  <div className='text-slate-500 w-full text-xs sm:text-sm md:text-md '>
                     {formatDistanceToNow(parseISO(blog.date), { addSuffix: true })}
                   </div>
                 </div>
@@ -410,7 +410,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
                 <div className='flex w-full flex-col gap-[10px] sm:flex-row  '>
 
-                  <div className=' overflow-y-scroll lg:w-[1200px] sm:w-[700px] text-center h-[200px] rounded-lg text-sm sm:text-md text-slate-500 border p-2'>{blog.content}</div>
+                  <div className=' overflow-y-scroll lg:w-[2000px] sm:w-[700px] text-center h-[400px] rounded-lg text-sm sm:text-md text-slate-500 border p-2'>{blog.content}</div>
                 </div>
 
                 <div className='hover:cursor-pointer flex    gap-[10px] sm:gap-[15px]  items-center justify-between'>

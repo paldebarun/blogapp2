@@ -7,8 +7,8 @@ import image1 from '../images/pexels-antoni-shkraba-4348078.jpg'
 import image2 from '../images/pexels-pixabay-159618.jpg'
 import image3 from '../images/pexels-tirachard-kumtanom-733856.jpg'
 import logo from '../images/CUBlogs.png'
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {CgSpinner} from 'react-icons/cg'
 
 
  const LoginPage = () => {
@@ -29,12 +29,12 @@ import 'react-toastify/dist/ReactToastify.css';
     startfunction();
   },[])
   
-  useState(()=>{
+  // useState(()=>{
 
-    if(isLoading){
-    toast("loading please wait ...");}
+  //   if(isLoading){
+  //   toast("loading please wait ...");}
     
-  },[isLoading])
+  // },[isLoading])
 
   const brightness = () => {
     setDark(false);
@@ -47,18 +47,10 @@ import 'react-toastify/dist/ReactToastify.css';
   return (
    <div className='p-4'>
 {isLoading ? 
-<div>
-<ToastContainer 
-    position="top-center"
-autoClose={4985}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="colored"/> 
+<div className='w-screen h-screen flex justify-center items-center'>
+ 
+<CgSpinner className='animate-spin w-[30px] h-[30px] ' />
+
 </div>
  
 

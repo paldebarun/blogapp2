@@ -27,6 +27,7 @@ const [increateblog,setincreateblog]=useState(false);
 const [openfilterbox,setfilterbox]=useState(false);
 
 
+
 const loginfunctionality=()=>{
   if(isLoggedIn){
   setLogin(false);
@@ -62,10 +63,10 @@ useEffect(() => {
             if(window.location.pathname==='/home'){setinhome(true)
           
             }
-  
-             
-  
+
              else if(window.location.pathname==='/add')setincreateblog(true);
+
+           
             
 
              const imgresponse=await axios.get(`https://blogserver3.onrender.com/api/v1/fetchprofile/${response.data.payload.email}`);
@@ -158,7 +159,7 @@ useEffect(() => {
         )
       }
       </div>
-          <Heading imgurl={imgurl} increateblog={increateblog} setDark={setDark} setLogin={setLogin} isLoggedIn={isLoggedIn}/>
+          <Heading  imgurl={imgurl} increateblog={increateblog} setDark={setDark} setLogin={setLogin} isLoggedIn={isLoggedIn}/>
            
            <Createblogcontent payload={payload} isLoggedIn={isLoggedIn} setLogin={setLogin} />
            

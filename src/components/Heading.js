@@ -17,7 +17,9 @@ import {AiOutlineCaretDown} from 'react-icons/ai'
   
   useEffect(()=>{
     const fetchdata=async ()=>{
-
+      
+      console.log("increateblog ",increateblog);
+      console.log("inhome",inhome);
 
     }
     fetchdata();
@@ -47,7 +49,7 @@ import {AiOutlineCaretDown} from 'react-icons/ai'
   }
 
   return (
-    <div className='heading   w-full flex justify-between  h-[100px]  bg-gradient-to-r   px-4   items-center shadow-lg'>
+    <div className= {increateblog? 'heading   w-full flex justify-between h-[50px] sm:h-[80px] md:h-[100px]   px-4   items-center shadow-lg': 'heading   w-full flex justify-between  h-[100px]    px-4   items-center shadow-lg'}>
     
         <div className='flex justify-between w-full'>
 
