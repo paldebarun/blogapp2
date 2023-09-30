@@ -30,6 +30,9 @@ const ContentPage = ({ blogs, setBlogs }) => {
     comment: ""
   });
   const [likeconatinerloader, setlikeloader] = useState(false);
+  const [blogloader,setblogloader]=useState({});
+  
+
 
   useEffect(() => {
     const initialCommentBoxOpen = {};
@@ -301,6 +304,12 @@ const ContentPage = ({ blogs, setBlogs }) => {
     try {
 
       console.log(payload.email);
+
+      setblogloader((prevLoading) => ({
+        ...prevLoading,
+        [blogid]: true, 
+      }));
+     
       const user = await axios.post('https://blogserver3.onrender.com/api/v1/fetchuser', { email: payload.email });
 
       console.log("this is user : ", user);
@@ -335,7 +344,10 @@ const ContentPage = ({ blogs, setBlogs }) => {
         }
 
 
-
+        setblogloader((prevLoading) => ({
+          ...prevLoading,
+          [blogid]: false,
+        }));
 
 
         reloadlikecontainer(blogid);
@@ -355,14 +367,23 @@ const ContentPage = ({ blogs, setBlogs }) => {
             newState[index] = true;
             return newState;
           });
+
         }
 
-
+        setblogloader((prevLoading) => ({
+          ...prevLoading,
+          [blogid]: false,
+        }));
 
         reloadlikecontainer(blogid);
       }
     } catch (error) {
       console.error(error);
+
+      setblogloader((prevLoading) => ({
+        ...prevLoading,
+        [blogid]: false,
+      }));
     }
   }
 
@@ -489,13 +510,13 @@ const ContentPage = ({ blogs, setBlogs }) => {
                 <div className='bg-slate-500 w-full h-[1px]'></div>
 
 
-                <div className={commentBoxOpen[blog._id] ? 'flex absolute bottom-[0px] bg-white w-full left-0 flex-col gap-[5px] h-[70%] overflow-y-scroll p-4 transition-all duration-175    border rounded-lg ' : 'flex absolute bottom-[0px] bg-white w-full left-0 flex-col gap-[5px] h-0 overflow-y-scroll     border rounded-lg transition-all duration-175'}>
+                <div className={commentBoxOpen[blog._id] ? 'flex absolute bottom-[0px] bg-white w-full left-0 flex-col gap-[5px] h-auto overflow-y-scroll px-4 transition-all    border rounded-lg ' : 'flex absolute bottom-[0px] bg-white w-full left-0 flex-col gap-[5px] h-0 overflow-y-scroll px-4    border rounded-lg transition-all duration-300'}>
                   <div className='w-full h-[20px] flex justify-center'>
                     <div className='w-[50px] h-[5px] rounded-2xl bg-slate-400'></div>
                   </div>
                   <GrFormClose className='hover:cursor-pointer' onClick={() => commentsectionhandler(blog._id)} />
 
-                  <div className='flex flex-col'>
+                  <div className='flex w-full items-start  flex-col'>
                     <form onSubmit={(event) => { addComment(blog._id, event) }} className="comment-section w-[100px]  sm:w-[200px]  text-sm md:w-[300px] flex      lg:w-[450px]   gap-[15px] items-start p-3">
                       <input type="text" name="comment" onChange={handleCommentChange} value={newComment.comment} className=' border-b-2 outline-none ' placeholder='add your comment here ' />
                       <button type="submit" > <AiOutlineSend className='w-[20px] h-[20px] hover:cursor-pointer' /></button>

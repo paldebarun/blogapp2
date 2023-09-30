@@ -15,7 +15,7 @@ import {IoIosLogIn} from 'react-icons/io'
 import {CgProfile} from "react-icons/cg";
 import {BsPlusSquare} from 'react-icons/bs'
 import {AiOutlineCaretDown} from 'react-icons/ai'
-
+import {CgSpinner} from 'react-icons/cg'
 
 
 const Profilesection = ({ payload }) => {
@@ -465,7 +465,7 @@ const loginfunctionality=()=>{
                       ) : (
                         <div className='w-full h-full flex justify-center items-center'>
                           
-                          <div className='text-sm'> loading ...</div>
+                          <CgSpinner className='animate-spin w-[30px] h-[30px]' />
 
                         </div>
                       )}
@@ -504,7 +504,7 @@ const loginfunctionality=()=>{
               <div className='sm:text-xl  text-slate-400 font-mono'>No blogs to show !</div>
 
              
-
+     
             </div>
 
             
