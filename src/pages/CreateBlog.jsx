@@ -17,7 +17,7 @@ import {IoIosLogIn} from 'react-icons/io'
 import {CgSpinner} from 'react-icons/cg'
 
 const CreateBlog = () => {
-const [isloading,setloading]=useState(false);
+const [isloading,setloading]=useState(true);
 const [isLoggedIn,setLogin]=useState(false);
 const [dark,setDark]=useState(false);
 const [payload, setPayload] = useState({});
@@ -53,7 +53,7 @@ useEffect(() => {
         };
 
         try {
-          setloading(true);
+         
           const response = await axios.get('https://blogserver3.onrender.com/api/v1/auth', { headers });
          
           if (response.data.success) {
@@ -81,7 +81,7 @@ useEffect(() => {
         } catch (error) {
           
           console.error('Error verifying token:', error);
-          // Error occurred, loading is complete
+          
         }
       }
     };
