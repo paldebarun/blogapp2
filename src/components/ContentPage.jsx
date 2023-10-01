@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { AiOutlineSend } from 'react-icons/ai'
 import { ToastContainer, toast } from 'react-toastify';
@@ -31,8 +30,8 @@ const ContentPage = ({ blogs, setBlogs }) => {
   });
   const [likeconatinerloader, setlikeloader] = useState(false);
   const [blogloader,setblogloader]=useState({});
-  
-
+  const [user_id,setuser_id]=useState('');
+   
 
   useEffect(() => {
     const initialCommentBoxOpen = {};
@@ -48,6 +47,9 @@ const ContentPage = ({ blogs, setBlogs }) => {
       setcommentloading(true);
       const response = await axios.post(`https://blogserver3.onrender.com/api/v1/fetchcomments`, { blog_id: blogId });
       console.log(response);
+
+      
+
       if (response.data.success) {
         setBlogComments((prevComments) => ({
           ...prevComments,
@@ -58,11 +60,15 @@ const ContentPage = ({ blogs, setBlogs }) => {
         comment: ""
       })
       setcommentloading(false);
+
+
     } catch (error) {
       console.error(error);
     }
 
   }
+
+
 
   const commentsectionhandler = async (blogId) => {
 
@@ -219,6 +225,8 @@ const ContentPage = ({ blogs, setBlogs }) => {
           const user = await axios.post('https://blogserver3.onrender.com/api/v1/fetchuser', { email: payload.email });
           if (user.data.user) {
             const userId = user.data.user._id;
+            setuser_id(user.data.user._id);
+            console.log("this is user id ",user_id);
             for (let i = 0; i < response_second.data.blogs.length; i++) {
               const blogId = response_second.data.blogs[i]._id;
               const existingLike = await axios.post(`https://blogserver3.onrender.com/api/v1/checklike`, { blog_id: blogId, user_id: userId });
@@ -526,12 +534,12 @@ const ContentPage = ({ blogs, setBlogs }) => {
                         <div key={commentIndex} className="comment flex items-center gap-[5px]">
                           <p className="text-black text-sm p-3">{comment.autherName ? comment.autherName : 'Unknown Author'}</p>
                           <p className="text-slate-500 text-sm p-3">{comment.comment_body ? comment.comment_body : "this is body "}</p>
-
+                          { user_id===comment.user_id &&
                           <AiOutlineDelete
                             className='w-[20px] h-[20px] hover:cursor-pointer'
                             onClick={() => deletecomment(blog._id, comment._id)}
                           />
-
+                          }
                         </div>
                       ))
                     ) : (
