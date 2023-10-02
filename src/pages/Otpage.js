@@ -157,35 +157,8 @@ import Spinner from '../components/Spinner';
 
     </div>
      :
-     <div>
-     <div className='heading h-[100px] w-full flex justify-between  md:h-[120px] relative bg-gradient-to-r from-cyan-500 to-blue-500 px-4  items-center shadow-lg'>
-    {
-      dark ? (
-        <div className='flex justify-between w-full'>
-          <NavLink to='/home' ><img className='  hover:cursor-pointer w-[24px] h-[24px] sm:w-[50px] sm:h-[50px] hover:scale-110 duration-150' src={home} /></NavLink>
-
-          
-          <img src={sun} className=" w-[24px] h-[24px] sm:w-[50px] sm:h-[50px]  hover:cursor-pointer hover:scale-110 duration-150" onClick={brightness} />
-          
-          
-          
-          
-          </div>
-
-      ) : (
-        <div className='flex justify-between w-full'>
-          <NavLink to='/home' ><img className=' hover:cursor-pointer w-[24px] h-[24px] sm:w-[50px] sm:h-[50px] hover:scale-110 duration-150' src={home} /></NavLink>
-
-         
-          <img src={moon} className=" w-[24px] h-[24px] sm:w-[50px] sm:h-[50px]  hover:cursor-pointer hover:scale-110 duration-150" onClick={darkness} />
-          
-         
-          
-          </div>
-      )
-
-    }
-        </div>
+     <div className='flex w-screen h-screen items-center justify-center'>
+    
 
         <div className='w-full h-[400px] flex flex-col gap-[20px] justify-center items-center'>
 
@@ -200,7 +173,7 @@ import Spinner from '../components/Spinner';
 
         <button
          onClick={submitotpform} 
-        className="flex flex-row gap-2 w-6/12 sm:w-[150px] m-auto h-[40px] items-center rounded-md text-white justify-center bg-gradient-to-r from-cyan-600 to-blue-500 hover:cursor-pointer hover:shadow-lg duration-700 hover:scale-105" >
+        className="flex flex-row gap-2 w-6/12 sm:w-[150px] m-auto h-[40px] items-center rounded-md text-white justify-center bg-slate-400 hover:cursor-pointer hover:shadow-xl duration-200 hover:scale-90" >
         <div>Submit otp</div>
         <img
           src={loginSymbol}
@@ -220,7 +193,7 @@ import Spinner from '../components/Spinner';
 
         
 
-        <Footer />
+     
 
 </div>
 

@@ -11,7 +11,7 @@ import { FaRegComment } from 'react-icons/fa'
 import {AiOutlineDelete} from 'react-icons/ai'
 import {BsDot} from 'react-icons/bs'
 import {CgSpinner} from 'react-icons/cg'
-
+import {BsPatchCheckFill} from 'react-icons/bs'
 
 const ContentPage = ({ blogs, setBlogs }) => {
   const [dark, setDark] = useState(false);
@@ -424,10 +424,10 @@ const ContentPage = ({ blogs, setBlogs }) => {
             {blogs.map((blog, index) => (
 
               <div className='p-2  sm:scale-90 lg:scale-100   h-auto flex flex-col items-start gap-[20px]  relative  w-[90%] md:w-[70%] lg:w-[70%]  break-words mx-auto text-2xl' key={blog._id} >
-              <div className='flex sm:flex-row flex-col w-full  justify-center items-start  gap-[10px]'>
-                <div className='flex text-xs items-center  sm:text-sm md:text-md gap-[3px]   sm:gap-[1px]'>
+              <div className='flex flex-row  w-full   justify-center items-start  gap-[10px]'>
+                <div className='flex  text-xs items-center  sm:text-sm md:text-md gap-[5px]   sm:gap-[1px]'>
                 <div className=' text-black font-extrabold  '>{blog.auther}</div>
-                <BsDot className='w-[20px] h-[20px] text-sm ' />
+                <BsPatchCheckFill className='w-[10px] h-[10px] text-sm ' />
                 </div>
                   <div className='text-slate-500 w-full text-xs sm:text-sm md:text-md '>
                     {formatDistanceToNow(parseISO(blog.date), { addSuffix: true })}
@@ -519,7 +519,9 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
 
                 <div className={commentBoxOpen[blog._id] ? 'flex absolute bottom-[0px] bg-white w-full left-0 flex-col gap-[5px] h-auto overflow-y-scroll px-4 transition-all    border rounded-lg ' : 'flex absolute bottom-[0px] bg-white w-full left-0 flex-col gap-[5px] h-0 overflow-y-scroll px-4    border rounded-lg transition-all duration-300'}>
+                <div className='w-full h-[10px]'></div>
                   <div className='w-full h-[20px] flex justify-center'>
+                     
                     <div className='w-[50px] h-[5px] rounded-2xl bg-slate-400'></div>
                   </div>
                   <GrFormClose className='hover:cursor-pointer' onClick={() => commentsectionhandler(blog._id)} />

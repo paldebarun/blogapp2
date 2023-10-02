@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import Footer from '../components/Footer';
-import Heading from '../components/Heading';
+
 import reward from '../images/olympics-159619_1280.png'
 
 const SuccessSignupPage = () => {
 
     const [dark,setDark]=useState(false);
   return (
-    <div className='flex flex-col  gap-[50px] items-center'>
-    <Heading dark={dark} setDark={setDark}/>
+    <div className='flex flex-col w-screen h-screen justify-center gap-[50px] items-center'>
+    
     <div className='flex flex-col gap-[20px] scale-75 sm:scale-100 h-[300px] justify-center items-center w-[300px]     bg-gradient-to-r from-slate-200 to-slate-300 shadow-2xl rounded-2xl py-4'>
        <img src={reward}  className='w-[200px] h-[200px]'/>
        <p className='text-slate-600 font-mono font-bold '>Sign Up Successfull</p>
@@ -23,7 +22,7 @@ const SuccessSignupPage = () => {
         
       </NavLink>
      
-     <Footer/>
+    
     </div>
 
 
