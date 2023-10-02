@@ -49,7 +49,7 @@ import {AiOutlineCaretDown} from 'react-icons/ai'
   }
 
   return (
-    <div className= {increateblog? 'heading   w-full flex justify-between h-[50px] sm:h-[80px] md:h-[100px]   px-4   items-center shadow-lg': 'heading   w-full flex justify-between  h-[100px]    px-4   items-center shadow-lg'}>
+    <div className= {increateblog? 'heading   w-full flex justify-between h-[70px] sm:h-[90px] md:h-[100px]   px-4   items-center shadow-lg': 'heading   w-full flex justify-between  h-[100px]    px-4   items-center shadow-lg'}>
     
         <div className='flex justify-between w-full'>
 

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { NavLink } from 'react-router-dom'
 import sessionlogintimer from '../images/../images/5228679.jpg'
-import Footer from '../components/Footer';
+
 import Heading from '../components/Heading'
 import Createblogcontent from '../components/Createblogcontent';
-import loading from '../images/loading.png'
+
 import { BsFilterRight } from 'react-icons/bs'
 import { GrFormClose } from 'react-icons/gr'
 import { GoHome } from 'react-icons/go';

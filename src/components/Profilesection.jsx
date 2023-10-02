@@ -290,7 +290,7 @@ const loginfunctionality=()=>{
       <div className='image-username w-screen  h-auto gap-[10px] flex-col sm:flex-row  sm:gap-[100px] flex items-start px-[20px] sm:px-[100px] justify-start   '>
 
 
-        <img src={profile.imageurl ? profile.imageurl : imageplaceholder} className='w-[120px] md:w-[150px] md:h-[150px] h-[120px]  lg:w-[200px] lg:h-[200px] rounded-full object-cover' />
+        <img src={profile.imageurl ? profile.imageurl : imageplaceholder} className='w-[120px] md:w-[150px] md:h-[150px] h-[120px] hover:scale-90 transition-all hover:shadow-2xl duration-150 hover:cursor-pointer  lg:w-[200px] lg:h-[200px] rounded-full object-cover' />
 
 
        
