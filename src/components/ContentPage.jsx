@@ -422,8 +422,11 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
 
             {blogs.map((blog, index) => (
-
+                 
               <div className='p-2  sm:scale-90 lg:scale-100   h-auto flex flex-col items-start gap-[20px]  relative  w-[90%] md:w-[70%] lg:w-[70%]  break-words mx-auto text-2xl' key={blog._id} >
+              <div className={blogloader[blog._id]?'w-full h-full flex justify-center items-start absolute opacity-80 bg-white ':'hidden'}>
+                <CgSpinner className='animate-spin' />
+              </div>
               <div className='flex flex-row  w-full   justify-center items-start  gap-[10px]'>
                 <div className='flex  text-xs items-center  sm:text-sm md:text-md gap-[5px]   sm:gap-[1px]'>
                 <div className=' text-black font-extrabold  '>{blog.auther}</div>
@@ -557,6 +560,8 @@ const ContentPage = ({ blogs, setBlogs }) => {
                 </div>
                 {/* )} */}
               </div>
+              
+              
 
             )
 
