@@ -27,7 +27,7 @@ const Editbio = () => {
   const [imgurl,setimgulr]=useState('');
   const [increateblog, setincreateblog] = useState(false);
   const [openfilterbox, setfilterbox] = useState(false);
-  
+
    
   const loginfunctionality = () => {
     if (isLoggedIn) {
@@ -47,10 +47,11 @@ const Editbio = () => {
     event.preventDefault();
 
     try {
+      console.log("this is form ",formdata);
       setLoading(true);
       const response = await axios.post('https://blogserver3.onrender.com/api/v1/updateProfile', formdata);
       console.log("this is the response1", response);
-       console.log("this is form ",formdata);
+     
       setLoading(false);
 
       // Redirect after successful submission
