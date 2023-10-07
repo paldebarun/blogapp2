@@ -4,9 +4,9 @@ import sessionlogintimer from '../images/../images/5228679.jpg'
 import imageplaceholder from '../images/icons8-test-account-64.png';
 import { useEffect } from 'react';
 import countryNames from '../constants/countryNames'
-import Footer from '../components/Footer';
+
 import axios from 'axios'
-import save from '../images/icons8-save-50.png'
+
 import Heading from '../components/Heading';
 import { BsFilterRight } from 'react-icons/bs'
 import { GrFormClose } from 'react-icons/gr'
@@ -49,7 +49,7 @@ const Editbio = () => {
       setLoading(true);
       const response = await axios.post('https://blogserver3.onrender.com/api/v1/updateProfile', formdata);
       console.log("this is the response1", response);
-       
+       console.log("this is form ",formdata);
       setLoading(false);
 
       // Redirect after successful submission
@@ -99,6 +99,8 @@ const Editbio = () => {
 
         const profile = response_second.data.profile;
         console.log("this is profile : ", profile);
+
+        
 
         const obj = {
           _id:profile._id,
@@ -168,6 +170,8 @@ const Editbio = () => {
       setImageUrlPreview(formdata.imageUrl);
     }
   }, [formdata.imageUrl]);
+
+
 
   const editbiohandler = (event) => {
     const { name, value, files } = event.target;
@@ -338,9 +342,9 @@ const Editbio = () => {
           </select>
         </div>
 
-        <div className='email w-[200px] sm:w-[300px] h-[50px] hover:cursor-pointer mx-auto'>
+        {/* <div className='email w-[200px] sm:w-[300px] h-[50px] hover:cursor-pointer mx-auto'>
           <input type="email" placeholder="Add your email " name="email" onChange={editbiohandler} value={formdata.email} className='w-full outline-none h-auto p-4 overflow-scroll text-xs sm:text-lg  border rounded-lg hover:shadow-lg text-center' />
-        </div>
+        </div> */}
 
         <div className='bio w-[300px] sm:w-[500px] lg:w-[800px] h-auto hover:cursor-pointer mx-auto'>
           <textarea type="message" placeholder="Add your bio " name="bio" onChange={editbiohandler} value={formdata.bio} className='w-full  p-4 outline-none overflow-auto break-words  text-xs sm:text-lg flex  border h-[300px] rounded-lg hover:shadow-lg text-center' />
