@@ -27,7 +27,7 @@ const Editbio = () => {
   const [imgurl,setimgulr]=useState('');
   const [increateblog, setincreateblog] = useState(false);
   const [openfilterbox, setfilterbox] = useState(false);
-
+  const [payload,setpayload]=useState('');
    
   const loginfunctionality = () => {
     if (isLoggedIn) {
@@ -89,7 +89,7 @@ const Editbio = () => {
 
 
         const payload = response.data.payload;
- 
+        setpayload(payload);
 
         const url = `https://blogserver3.onrender.com/api/v1/fetchprofile/${payload.email}`;
         const response_second = await axios.get(url);
@@ -112,7 +112,7 @@ const Editbio = () => {
           pseudonym: profile.pseudonym,
           job: profile.job,
           country: profile.country,
-          email: profile.email,
+          email: payload.email,
           bio: profile.bio
 
 
