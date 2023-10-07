@@ -27,6 +27,7 @@ const Editbio = () => {
   const [imgurl,setimgulr]=useState('');
   const [increateblog, setincreateblog] = useState(false);
   const [openfilterbox, setfilterbox] = useState(false);
+  
    
   const loginfunctionality = () => {
     if (isLoggedIn) {
@@ -116,7 +117,7 @@ const Editbio = () => {
 
         }
     
-
+      console.log("this is obj : ",obj);
         
         
 
@@ -145,6 +146,7 @@ const Editbio = () => {
     imageUrl: "",
     username: "",
     pseudonym: "",
+    email:"",
     job: "",
     country: "",
     email: "",
