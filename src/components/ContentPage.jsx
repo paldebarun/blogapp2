@@ -31,6 +31,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
   const [likeconatinerloader, setlikeloader] = useState(false);
   const [blogloader,setblogloader]=useState({});
   const [user_id,setuser_id]=useState('');
+  const [openreplybox,setopenreplybox]=useState({});
    
 
   useEffect(() => {
@@ -536,8 +537,10 @@ const ContentPage = ({ blogs, setBlogs }) => {
                     </form>
                     {blogComments[blog._id] && !commentloading ? (
                       blogComments[blog._id].map((comment, commentIndex) => (
-                        <div key={commentIndex} className="comment flex items-center gap-[5px]">
-                          <p className="text-black text-sm p-3">{comment.autherName ? comment.autherName : 'Unknown Author'}</p>
+                        <div key={commentIndex} className="comment ">
+
+                        <div className='flex items-center gap-[5px]'>
+                        <p className="text-black text-sm p-3">{comment.autherName ? comment.autherName : 'Unknown Author'}</p>
                           <p className="text-slate-500 text-sm p-3">{comment.comment_body ? comment.comment_body : "this is body "}</p>
                           { user_id===comment.user_id &&
                           <AiOutlineDelete
@@ -545,7 +548,20 @@ const ContentPage = ({ blogs, setBlogs }) => {
                             onClick={() => deletecomment(blog._id, comment._id)}
                           />
                           }
+
+                          <input type="text" className='outline-none border-b-2 text-xs w-[200px]' placeholder='post reply to the comment'/> 
+
+                          
+</div>
+
+      
+
+                          { comment.replies.length > 0 ?
+                          <div className='reply_button text-xs text-slate-500'>view replies</div>
+                          :<div></div>
+                          }
                         </div>
+                        
                       ))
                     ) : (
                       <div className='w-full h-full flex justify-center items-center'>
