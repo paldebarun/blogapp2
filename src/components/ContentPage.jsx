@@ -9,7 +9,6 @@ import { FcLike } from 'react-icons/fc'
 import { FcLikePlaceholder } from 'react-icons/fc'
 import { FaRegComment } from 'react-icons/fa'
 import {AiOutlineDelete} from 'react-icons/ai'
-import {BsDot} from 'react-icons/bs'
 import {CgSpinner} from 'react-icons/cg'
 import {BsPatchCheckFill} from 'react-icons/bs'
 
@@ -28,10 +27,14 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
     comment: ""
   });
+
+  const [newreply,setnewreply]=useState({
+    reply:""
+  })
   const [likeconatinerloader, setlikeloader] = useState(false);
   const [blogloader,setblogloader]=useState({});
   const [user_id,setuser_id]=useState('');
-  const [openreplybox,setopenreplybox]=useState({});
+  const [showReplies, setShowReplies] = useState({});
    
 
   useEffect(() => {
@@ -70,6 +73,12 @@ const ContentPage = ({ blogs, setBlogs }) => {
   }
 
 
+  const toggleReplies = (commentId) => {
+    setShowReplies((prev) => ({
+      ...prev,
+      [commentId]: !prev[commentId],
+    }));
+  };
 
   const commentsectionhandler = async (blogId) => {
 
@@ -77,6 +86,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
       if (!blogComments[blogId]) {
         setcommentloading(true);
+        
         const response = await axios.post(`https://blogserver3.onrender.com/api/v1/fetchcomments`, { blog_id: blogId });
         console.log(response);
         if (response.data.success) {
@@ -112,6 +122,17 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
     console.log(newComment);
   };
+
+  const handlereplychange= (event)=>{
+    const {name,value}=event.target;
+
+    setnewreply((prev)=>({
+      ...prev,
+      [name]:value
+    }));
+
+    console.log("this is the new reply",newreply);
+  }
 
 
 
@@ -182,6 +203,32 @@ const ContentPage = ({ blogs, setBlogs }) => {
   }
 
 
+  const addReply = async (blogId, commentId, event) => {
+    event.preventDefault();
+    try {
+      if (!newComment.comment) {
+        return;
+      }
+      setcommentloading(true);
+      const obj = {
+        
+        comment_id: commentId,
+        user_id: user_id,
+        body: newComment.comment,
+      };
+      const response = await axios.post(
+        'https://blogserver3.onrender.com/api/v1/addreply',
+        obj
+      );
+      if (response.data.success) {
+        setcommentloading(false);
+        reloadcommentbox(blogId);
+      }
+    } catch (error) {
+      console.error(error);
+      setcommentloading(false);
+    }
+  };
 
 
 
@@ -397,6 +444,8 @@ const ContentPage = ({ blogs, setBlogs }) => {
   }
 
 
+  
+
 
 
   return (
@@ -549,17 +598,16 @@ const ContentPage = ({ blogs, setBlogs }) => {
                           />
                           }
 
-                          <input type="text" className='outline-none border-b-2 text-xs w-[200px]' placeholder='post reply to the comment'/> 
+                          <form  className='flex items-center'>
+                            <input type="text" name="reply" onChange={handlereplychange} value={newreply.reply} placeholder="reply here" className='outline-none text-xs border-b-2 px-3' />
 
-                          
-</div>
+                            <input type="submit" className='cursor-pointer text-xs h-auto w-auto p-1 hover:bg-slate-400 rounded-lg hover:text-white' value="post" />
+                          </form>                  
+                         </div>
 
       
 
-                          { comment.replies.length > 0 ?
-                          <div className='reply_button text-xs text-slate-500'>view replies</div>
-                          :<div></div>
-                          }
+                       
                         </div>
                         
                       ))
