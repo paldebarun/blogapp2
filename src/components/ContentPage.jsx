@@ -23,6 +23,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
   const [commentBoxOpen, setCommentBoxOpen] = useState({});
   const [islikeArray, setIsLikeArray] = useState([]);
   const [blogComments, setBlogComments] = useState({});
+  const [commentreplies,setcommentreplies]=useState({});
   const [newComment, setNewComment] = useState({
 
     comment: ""
@@ -35,6 +36,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
   const [blogloader,setblogloader]=useState({});
   const [user_id,setuser_id]=useState('');
   const [showReplies, setShowReplies] = useState({});
+  const [replyloader,setreplyloader]=useState(false);
    
 
   useEffect(() => {
@@ -80,6 +82,50 @@ const ContentPage = ({ blogs, setBlogs }) => {
     }));
   };
 
+  const handlereplycontainer=async (commentId)=>{
+
+   try{
+    
+      if(!commentreplies[commentId]){
+          setreplyloader(true);
+
+          const response= await axios.post('https://blogserver3.onrender.com/api/v1/fecthreplies',{comment_id:commentId});
+          console.log("this is fetch reply response : ",response.data.replies);
+          console.log("this is status : ",response.data.success);
+
+          if(response.data.success){
+          
+            setcommentreplies((prev)=>({
+                ...prev,
+                [commentId]:response.data.replies
+            }));
+
+            
+          }
+
+          setreplyloader(false);
+         
+
+      }
+
+      setShowReplies((prev)=>({
+        ...prev,
+      [commentId]:!prev[commentId]
+      }));
+      console.log("this is show replies ",showReplies);
+      console.log("these are the replies of the comment : ",commentreplies);
+      
+
+      
+
+   }
+   catch(error){
+   setreplyloader(false);
+   console.log(error);
+   }
+
+  }
+
   const commentsectionhandler = async (blogId) => {
 
     try {
@@ -110,6 +156,8 @@ const ContentPage = ({ blogs, setBlogs }) => {
     }
   };
 
+
+
   const handleCommentChange = (event) => {
     const { name, value } = event.target;
     setNewComment((prev) => ({
@@ -133,6 +181,9 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
     console.log("this is the new reply",newreply);
   }
+
+
+  
 
 
 
@@ -190,7 +241,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
       console.log("response of uncomment : ", response);
 
       if (response.data.success) {
-        // Filter out the deleted comment from the blogComments state
+       
         setBlogComments((prevComments) => ({
           ...prevComments,
           [blogId]: prevComments[blogId].filter(comment => comment._id !== commentId),
@@ -206,7 +257,12 @@ const ContentPage = ({ blogs, setBlogs }) => {
   const addReply = async (blogId, commentId, event) => {
     event.preventDefault();
     try {
-      if (!newComment.comment) {
+      
+      
+      console.log("user id : ",user_id);
+      
+
+      if (!newreply) {
         return;
       }
       setcommentloading(true);
@@ -214,15 +270,18 @@ const ContentPage = ({ blogs, setBlogs }) => {
         
         comment_id: commentId,
         user_id: user_id,
-        body: newComment.comment,
+        body: newreply.reply,
       };
       const response = await axios.post(
-        'https://blogserver3.onrender.com/api/v1/addreply',
+        'https://blogserver3.onrender.com/api/v1/postreply',
         obj
       );
       if (response.data.success) {
         setcommentloading(false);
         reloadcommentbox(blogId);
+        setnewreply({
+          reply:""
+        });
       }
     } catch (error) {
       console.error(error);
@@ -586,7 +645,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
                     </form>
                     {blogComments[blog._id] && !commentloading ? (
                       blogComments[blog._id].map((comment, commentIndex) => (
-                        <div key={commentIndex} className="comment ">
+                        <div key={commentIndex} className="comment relative ">
 
                         <div className='flex items-center gap-[5px]'>
                         <p className="text-black text-sm p-3">{comment.autherName ? comment.autherName : 'Unknown Author'}</p>
@@ -598,15 +657,39 @@ const ContentPage = ({ blogs, setBlogs }) => {
                           />
                           }
 
-                          <form  className='flex items-center'>
+                          <form onSubmit={(event)=>{addReply(blog._id,comment._id,event)}}  className='flex items-center'>
                             <input type="text" name="reply" onChange={handlereplychange} value={newreply.reply} placeholder="reply here" className='outline-none text-xs border-b-2 px-3' />
 
                             <input type="submit" className='cursor-pointer text-xs h-auto w-auto p-1 hover:bg-slate-400 rounded-lg hover:text-white' value="post" />
-                          </form>                  
+                          </form>   
+
+
                          </div>
 
-      
+                         <div className='text-sm ml-3  p-1  rounded-lg  w-[90px] hover:cursor-pointer hover:text-slate-500 text-slate-400' onClick={()=>{handlereplycontainer(comment._id)}} >view replies</div>
 
+                         { 
+                          commentreplies[comment._id] && !replyloader ? (
+
+                            commentreplies[comment._id].map((reply,replyindex)=>(
+                              <div key={replyindex} className={showReplies[comment._id]?'flex ml-5 h-auto   flex-col gap-[10px] w-auto  ':'hidden'} >
+                                
+                                <div className='text-sm text-slate-400'>{reply.body}</div>
+
+
+                              </div>
+                            ))
+                          ):(
+                            replyloader ?
+                            <div className='w-full h-full flex justify-center items-center'>
+
+                        <div className='text-sm'> loading ...</div>
+
+                      </div>:<div></div>
+                          )
+
+                         }
+                          
                        
                         </div>
                         
@@ -617,12 +700,14 @@ const ContentPage = ({ blogs, setBlogs }) => {
                         <div className='text-sm'> loading ...</div>
 
                       </div>
-                    )}
+                    )
+                    
+                    }
 
                   </div>
 
-                </div>
-                {/* )} */}
+                         </div>
+               
               </div>
               
               
