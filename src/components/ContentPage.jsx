@@ -737,13 +737,13 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
                           <form onSubmit={(event)=>{addReply(blog._id,comment._id,event)}}  className='flex items-center'>
                           <input
-  type="text"
-  name="reply"
-  onChange={(event) => handlereplychange(event, comment._id)}
-  value={newreply[comment._id] || ""} // Use newreply[comment._id] for this specific comment
-  placeholder="reply here"
-  className="outline-none text-xs border-b-2 px-3"
-/>
+                            type="text"
+                            name="reply"
+                            onChange={(event) => handlereplychange(event, comment._id)}
+                            value={newreply[comment._id] || ""} // Use newreply[comment._id] for this specific comment
+                            placeholder="reply here"
+                            className="outline-none text-xs border-b-2 px-3"
+                          />
 
 
                             <input type="submit" className='cursor-pointer text-xs h-auto w-auto p-1 hover:bg-slate-400 rounded-lg hover:text-white' value="post" />
