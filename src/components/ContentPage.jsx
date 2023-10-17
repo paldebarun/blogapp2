@@ -334,6 +334,8 @@ const ContentPage = ({ blogs, setBlogs }) => {
         setnewreply({
           reply:""
         });
+
+        reloadreplybox(commentId);
       }
 
     } catch (error) {
