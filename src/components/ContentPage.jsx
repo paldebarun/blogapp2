@@ -35,7 +35,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
   const [blogloader,setblogloader]=useState({});
   const [user_id,setuser_id]=useState('');
   const [showReplies, setShowReplies] = useState({});
-  const [replyloader,setreplyloader]=useState(false);
+  const [replyloader,setreplyloader]=useState({});
    
 
   useEffect(() => {
@@ -76,7 +76,10 @@ const ContentPage = ({ blogs, setBlogs }) => {
   const reloadreplybox = async (commentId) => {
 
     try {
-      setreplyloader(true);
+      setreplyloader((prev)=>({
+        ...prev,
+        [commentId]:true
+      }));
       const response = await axios.post(`https://blogserver3.onrender.com/api/v1/fecthreplies`, {comment_id:commentId});
 
       console.log(response);
@@ -90,10 +93,17 @@ const ContentPage = ({ blogs, setBlogs }) => {
             }));
       }
       
-      setreplyloader(false);
+      setreplyloader((prev)=>({
+        ...prev,
+        [commentId]:false
+      }));
 
 
     } catch (error) {
+      setreplyloader((prev)=>({
+        ...prev,
+        [commentId]:false
+      }));
       console.error(error);
     }
 
@@ -106,7 +116,10 @@ const ContentPage = ({ blogs, setBlogs }) => {
    try{
     
       if(!commentreplies[commentId]){
-          setreplyloader(true);
+          setreplyloader((prev)=>({
+            ...prev,
+            [commentId]:true
+          }));
 
           const response= await axios.post('https://blogserver3.onrender.com/api/v1/fecthreplies',{comment_id:commentId});
           console.log("this is fetch reply response : ",response.data.replies);
@@ -122,7 +135,10 @@ const ContentPage = ({ blogs, setBlogs }) => {
             
           }
 
-          setreplyloader(false);
+          setreplyloader((prev)=>({
+            ...prev,
+            [commentId]:false
+          }));
          
 
       }
@@ -139,7 +155,10 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
    }
    catch(error){
-   setreplyloader(false);
+    setreplyloader((prev)=>({
+      ...prev,
+      [commentId]:false
+    }));
    console.log(error);
    }
 
@@ -272,7 +291,10 @@ const ContentPage = ({ blogs, setBlogs }) => {
   const deletereply =async (commentId,replyId)=>{
     try{
        
-      setreplyloader(true);
+      setreplyloader((prev)=>({
+        ...prev,
+        [commentId]:true
+      }));
 
       const response=await axios.post('https://blogserver3.onrender.com/api/v1/deletereply',{
         commentId:commentId,
@@ -290,7 +312,10 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
        reloadreplybox(commentId);
       }
-      setreplyloader(false);
+      setreplyloader((prev)=>({
+        ...prev,
+        [commentId]:false
+      }));
       
    
 
@@ -308,7 +333,10 @@ const ContentPage = ({ blogs, setBlogs }) => {
       if (!newreply[commentId]) {
         return;
       }
-      setreplyloader(true);
+      setreplyloader((prev)=>({
+        ...prev,
+        [commentId]:true
+      }));
       const obj = {
         comment_id: commentId,
         user_id: user_id,
@@ -319,7 +347,10 @@ const ContentPage = ({ blogs, setBlogs }) => {
         obj
       );
       if (response.data.success) {
-        setreplyloader(false);
+        setreplyloader((prev)=>({
+          ...prev,
+          [commentId]:false
+        }));
         reloadcommentbox(blogId);
         setNewReply({
           ...newreply,
@@ -329,7 +360,10 @@ const ContentPage = ({ blogs, setBlogs }) => {
       }
     } catch (error) {
       console.error(error);
-      setreplyloader(false);
+      setreplyloader((prev)=>({
+        ...prev,
+        [commentId]:false
+      }));
     }
   };
   
@@ -721,7 +755,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
                          <div className='text-sm ml-3  p-1  rounded-lg  w-[90px] hover:cursor-pointer hover:text-slate-500 text-slate-400' onClick={()=>{handlereplycontainer(comment._id)}} >view replies</div>
 
                          { 
-                          commentreplies[comment._id] && !replyloader ? (
+                          commentreplies[comment._id] && !replyloader[comment._id] ? (
 
                             commentreplies[comment._id].map((reply,replyindex)=>(
                               <div key={replyindex} className={showReplies[comment._id]?'flex ml-5 h-auto   flex-col gap-[10px] w-auto  ':'hidden'} >
@@ -740,7 +774,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
                               </div>
                             ))
                           ):(
-                            replyloader ?
+                            replyloader[comment._id] ?
                             <div className='w-full h-full flex justify-center items-center'>
 
                         <div className='text-sm'> loading ...</div>
