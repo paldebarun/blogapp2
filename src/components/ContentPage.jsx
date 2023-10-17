@@ -29,9 +29,8 @@ const ContentPage = ({ blogs, setBlogs }) => {
     comment: ""
   });
 
-  const [newreply,setnewreply]=useState({
-    reply:""
-  })
+  const [newreply, setNewReply] = useState({});
+
   const [likeconatinerloader, setlikeloader] = useState(false);
   const [blogloader,setblogloader]=useState({});
   const [user_id,setuser_id]=useState('');
@@ -191,15 +190,12 @@ const ContentPage = ({ blogs, setBlogs }) => {
     console.log(newComment);
   };
 
-  const handlereplychange= (event)=>{
-    const {name,value}=event.target;
-
-    setnewreply((prev)=>({
-      ...prev,
-      [name]:value
-    }));
-
-    console.log("this is the new reply",newreply);
+  const handlereplychange= (event,commentId)=>{
+    const { name, value } = event.target;
+  setNewReply((prev) => ({
+    ...prev,
+    [commentId]: value,
+  }));
   }
 
 
@@ -309,41 +305,34 @@ const ContentPage = ({ blogs, setBlogs }) => {
   const addReply = async (blogId, commentId, event) => {
     event.preventDefault();
     try {
-      
-      
-      console.log("user id : ",user_id);
-      
-
-      if (!newreply) {
+      if (!newreply[commentId]) {
         return;
       }
-      setcommentloading(true);
+      setreplyloader(true);
       const obj = {
-        
         comment_id: commentId,
         user_id: user_id,
-        body: newreply.reply,
+        body: newreply[commentId], 
       };
       const response = await axios.post(
         'https://blogserver3.onrender.com/api/v1/postreply',
         obj
       );
       if (response.data.success) {
-        setcommentloading(false);
+        setreplyloader(false);
         reloadcommentbox(blogId);
-        setnewreply({
-          reply:""
+        setNewReply({
+          ...newreply,
+          [commentId]: "", 
         });
-
         reloadreplybox(commentId);
       }
-
     } catch (error) {
       console.error(error);
-      setcommentloading(false);
+      setreplyloader(false);
     }
   };
-
+  
 
 
 
@@ -713,7 +702,15 @@ const ContentPage = ({ blogs, setBlogs }) => {
                           }
 
                           <form onSubmit={(event)=>{addReply(blog._id,comment._id,event)}}  className='flex items-center'>
-                            <input type="text" name="reply" onChange={handlereplychange} value={newreply.reply} placeholder="reply here" className='outline-none text-xs border-b-2 px-3' />
+                          <input
+  type="text"
+  name="reply"
+  onChange={(event) => handlereplychange(event, comment._id)}
+  value={newreply[comment._id] || ""} // Use newreply[comment._id] for this specific comment
+  placeholder="reply here"
+  className="outline-none text-xs border-b-2 px-3"
+/>
+
 
                             <input type="submit" className='cursor-pointer text-xs h-auto w-auto p-1 hover:bg-slate-400 rounded-lg hover:text-white' value="post" />
                           </form>   
@@ -732,7 +729,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
                                 <div className='flex gap-[10px] justify-start items-center'>
                                 <div className='text-sm text-slate-500 font-bold'>{reply.autherName}</div>
                                 <div className='text-sm text-slate-400'>{reply.body}</div>
-                                { reply.user_id==user_id &&
+                                { reply.user_id===user_id &&
                                   <AiOutlineDelete className='hover:cursor-pointer w-[15px] h-[15px]' onClick={()=>{deletereply(comment._id,reply._id)}} />
                                 }
                                 
