@@ -75,12 +75,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
   }
 
 
-  const toggleReplies = (commentId) => {
-    setShowReplies((prev) => ({
-      ...prev,
-      [commentId]: !prev[commentId],
-    }));
-  };
+ 
 
   const handlereplycontainer=async (commentId)=>{
 
@@ -707,6 +702,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
                               <div key={replyindex} className={showReplies[comment._id]?'flex ml-5 h-auto   flex-col gap-[10px] w-auto  ':'hidden'} >
                                 
                                 <div className='flex gap-[10px] justify-start items-center'>
+                                <div className='text-sm text-slate-500 font-bold'>{reply.autherName}</div>
                                 <div className='text-sm text-slate-400'>{reply.body}</div>
                                 { reply.user_id==user_id &&
                                   <AiOutlineDelete className='hover:cursor-pointer w-[15px] h-[15px]' onClick={()=>{deletereply(comment._id,reply._id)}} />
