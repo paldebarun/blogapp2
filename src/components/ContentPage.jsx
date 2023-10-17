@@ -74,6 +74,31 @@ const ContentPage = ({ blogs, setBlogs }) => {
 
   }
 
+  const reloadreplybox = async (commentId) => {
+
+    try {
+      setreplyloader(true);
+      const response = await axios.post(`https://blogserver3.onrender.com/api/v1/fecthreplies`, {comment_id:commentId});
+
+      console.log(response);
+
+      
+
+      if (response.data.success) {
+        setcommentreplies((prev)=>({
+                ...prev,
+                [commentId]:response.data.replies
+            }));
+      }
+      
+      setreplyloader(false);
+
+
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
 
  
 
@@ -267,7 +292,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
           [commentId]:prev[commentId].filter(reply => reply._id!==replyId),
         }));
 
-       
+       reloadreplybox(commentId);
       }
       setreplyloader(false);
       
@@ -310,6 +335,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
           reply:""
         });
       }
+
     } catch (error) {
       console.error(error);
       setcommentloading(false);
