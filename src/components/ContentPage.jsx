@@ -253,6 +253,38 @@ const ContentPage = ({ blogs, setBlogs }) => {
     }
   }
 
+  const deletereply =async (commentId,replyId)=>{
+    try{
+       
+      setreplyloader(true);
+
+      const response=await axios.post('https://blogserver3.onrender.com/api/v1/deletereply',{
+        commentId:commentId,
+        replyId:replyId
+      });
+
+      console.log("this is reponse : ",response);
+     
+      if(response.data.success){
+        
+        setcommentreplies((prev)=>({
+          ...prev,
+          [commentId]:prev[commentId].filter(reply => reply._id!==replyId),
+        }));
+
+       
+      }
+      setreplyloader(false);
+      
+   
+
+    }
+    catch(error){
+
+     console.log(error);
+    }
+  }
+
 
   const addReply = async (blogId, commentId, event) => {
     event.preventDefault();
@@ -674,8 +706,15 @@ const ContentPage = ({ blogs, setBlogs }) => {
                             commentreplies[comment._id].map((reply,replyindex)=>(
                               <div key={replyindex} className={showReplies[comment._id]?'flex ml-5 h-auto   flex-col gap-[10px] w-auto  ':'hidden'} >
                                 
+                                <div className='flex gap-[10px] justify-start items-center'>
                                 <div className='text-sm text-slate-400'>{reply.body}</div>
-
+                                { reply.user_id==user_id &&
+                                  <AiOutlineDelete className='hover:cursor-pointer w-[15px] h-[15px]' onClick={()=>{deletereply(comment._id,reply._id)}} />
+                                }
+                                
+                                </div>
+                                
+                                
 
                               </div>
                             ))
@@ -689,7 +728,7 @@ const ContentPage = ({ blogs, setBlogs }) => {
                           )
 
                          }
-                          
+                          <div className='h-[30px] w-full'></div>
                        
                         </div>
                         
