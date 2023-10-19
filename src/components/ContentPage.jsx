@@ -723,32 +723,34 @@ const ContentPage = ({ blogs, setBlogs }) => {
                     </form>
                     {blogComments[blog._id] && !commentloading ? (
                       blogComments[blog._id].map((comment, commentIndex) => (
-                        <div key={commentIndex} className="comment relative ">
-
-                        <div className='flex items-center gap-[5px]'>
+                        <div key={commentIndex} className="border p-2 w-auto comment relative ">
+                        {/* <div className='flex flex-col sm:flex-row w-full h-auto'> */}
+                        <div className='flex sm:flex-row flex-col items-start sm:items-center gap-[2px]'>
+                        <div className='flex flex-wrap items-center gap-[5px] w-full h-full'>
                         <p className="text-black text-sm p-3">{comment.autherName ? comment.autherName : 'Unknown Author'}</p>
-                          <p className="text-slate-500 text-sm p-3">{comment.comment_body ? comment.comment_body : "this is body "}</p>
+                          <p className="text-slate-500 w-auto text-sm p-3">{comment.comment_body ? comment.comment_body : "this is body "}</p>
                           { user_id===comment.user_id &&
                           <AiOutlineDelete
-                            className='w-[20px] h-[20px] hover:cursor-pointer'
+                            className='sm:w-[20px] w-[10px] h-[10px] sm:h-[20px] hover:cursor-pointer'
                             onClick={() => deletecomment(blog._id, comment._id)}
                           />
                           }
+                          </div>
 
                           <form onSubmit={(event)=>{addReply(blog._id,comment._id,event)}}  className='flex items-center'>
                           <input
                             type="text"
                             name="reply"
                             onChange={(event) => handlereplychange(event, comment._id)}
-                            value={newreply[comment._id] || ""} // Use newreply[comment._id] for this specific comment
+                            value={newreply[comment._id] || ""} 
                             placeholder="reply here"
                             className="outline-none text-xs border-b-2 px-3"
                           />
-
+                           
 
                             <input type="submit" className='cursor-pointer text-xs h-auto w-auto p-1 hover:bg-slate-400 rounded-lg hover:text-white' value="post" />
                           </form>   
-
+                          {/* </div> */}
 
                          </div>
 
